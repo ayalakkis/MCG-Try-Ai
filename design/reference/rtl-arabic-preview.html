@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>الكشك · لمحة الحملة</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}*{box-sizing:border-box}p,h1,h2,h3{margin:0}
+.root{font-family:'IBM Plex Sans Arabic','Montserrat',ui-sans-serif,system-ui,sans-serif;color:#144074;-webkit-font-smoothing:antialiased}
+.en{font-family:'Montserrat',ui-sans-serif,system-ui,sans-serif}
+button,input{font:inherit;color:inherit}
+.stage{position:relative;overflow:hidden;background:#144074}
+.blob{position:absolute;display:block;border-radius:50%;filter:blur(110px);opacity:.55}
+.canvas{position:relative;background:#fff;display:flex;flex-direction:column;box-shadow:0 30px 90px rgba(10,30,70,.25)}
+.seg{display:flex;background:#EEF2F7;border-radius:999px;gap:4px;padding:6px}
+.seg button,.seg a{border:0;background:transparent;font-weight:600;color:#4E5F78;border-radius:999px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;min-width:var(--segw);height:var(--segh);font-size:var(--segf)}
+.seg .on{background:#144074;color:#fff}
+.btn1{display:inline-flex;align-items:center;justify-content:center;background:#144074;color:#fff;border:0;border-radius:999px;font-weight:600;text-decoration:none;cursor:pointer}
+.btn2{display:inline-flex;align-items:center;justify-content:center;background:#fff;color:#144074;border:1.5px solid #D9E2EC;border-radius:999px;font-weight:600;text-decoration:none;cursor:pointer}
+.card{background:#fff;border:1px solid #E3EAF2;box-shadow:0 1px 2px rgba(16,42,80,.04),0 10px 30px rgba(16,42,80,.06);border-radius:36px;padding:32px 40px;display:flex;flex-direction:column;gap:14px}
+.chip{display:inline-flex;align-items:center;background:#E8F2FB;color:#125D99;border-radius:999px;font-weight:600;white-space:nowrap}
+.muted{color:#4E5F78}
+.grad{background:linear-gradient(270deg,#2694CF,#125D99);-webkit-background-clip:text;background-clip:text;color:transparent}
+.dots{display:inline-flex;align-items:center;gap:.09em;margin-inline-start:.12em;vertical-align:baseline}
+.dots i{display:block;width:.19em;height:.19em;border-radius:50%}
+.dots i:nth-child(1){background:#EF8E0A}.dots i:nth-child(2){background:#E5418C}.dots i:nth-child(3){background:#1EA5E0}
+.lbl{font-size:26px;font-weight:700;color:#125D99}
+.lbl::before{content:"";display:inline-block;width:.75em;height:.75em;border-radius:50%;background:#E5418C;margin-inline-end:.5em;vertical-align:-.06em}
+.ring{display:inline-block;flex:none;border-radius:50%;background:conic-gradient(#2694CF 0 72%,#DFE9F3 72% 100%);-webkit-mask:radial-gradient(circle,transparent 52%,#000 54%);mask:radial-gradient(circle,transparent 52%,#000 54%)}
+svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.orb{position:relative;border-radius:50%;flex:none}
+.orb>i{position:absolute;display:block;border-radius:50%}
+.orb .g{inset:-24%;background:radial-gradient(circle,rgba(38,148,207,.55) 0%,rgba(140,202,238,.22) 42%,rgba(140,202,238,0) 68%);filter:blur(10px)}
+.orb .c{inset:0;background:radial-gradient(circle at 34% 28%,#fff 0%,#E2F2FC 12%,#8CCAEE 36%,#2694CF 64%,#144074 92%);box-shadow:inset 0 -12px 26px rgba(10,45,95,.32),inset 0 8px 16px rgba(255,255,255,.5)}
+.orb .s{inset:8%;background:conic-gradient(from 0deg,rgba(255,255,255,0) 0deg,rgba(160,220,255,.85) 90deg,rgba(229,65,140,.35) 200deg,rgba(255,255,255,0) 300deg);filter:blur(6px);mix-blend-mode:screen;opacity:.75;animation:orbspin 14s linear infinite}
+.orb .h{top:8%;left:19%;width:42%;height:26%;background:radial-gradient(ellipse at center,rgba(255,255,255,.95),rgba(255,255,255,0) 70%);filter:blur(2px)}
+.orb.speak{animation:orbspeak 1.4s ease-in-out infinite}
+.wk{display:flex;flex-direction:column;gap:12px}
+.wk span:first-child{height:10px;border-radius:99px}
+@keyframes orbspin{to{transform:rotate(360deg)}}
+@keyframes orbspeak{0%,100%{transform:scale(1)}12%{transform:scale(1.06)}24%{transform:scale(1.01)}36%{transform:scale(1.07)}52%{transform:scale(1)}68%{transform:scale(1.05)}84%{transform:scale(1.01)}}
+</style>
+<div class="root stage" dir="rtl" style="width: 1080px; height: 1920px; padding: 40px; --segw: 108px; --segh: 68px; --segf: 26px">
+  <i class="blob" style="width: 820px; height: 820px; right: -260px; top: -220px; background: #2694CF"></i>
+  <i class="blob" style="width: 760px; height: 760px; left: -300px; top: 560px; background: #125D99"></i>
+  <i class="blob" style="width: 900px; height: 900px; right: -160px; bottom: -400px; background: #1EA5E0"></i>
+  <div class="canvas" style="height: 100%; border-radius: 56px; padding: 44px 64px 40px">
+
+    <header style="display: flex; align-items: center; justify-content: space-between; height: 88px">
+      <img src="../assets/mcg-mark-color.png" alt="MCG" style="height: 60px; width: auto; display: block">
+      <div style="display: flex; align-items: center; gap: 16px">
+        <button class="btn2" style="height: 76px; padding: 0 30px; font-size: 26px; gap: 12px"><svg class="i" viewBox="0 0 24 24" style="font-size: 26px"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path></svg>من جديد</button>
+        <div class="seg"><button class="on">عربي</button><a class="en" href="#" style="font-size: 24px">EN</a></div>
+      </div>
+    </header>
+
+    <section style="margin-top: 56px; display: flex; align-items: center; gap: 28px">
+      <div class="orb speak" style="width: 96px; height: 96px"><i class="g"></i><i class="c"></i><i class="s"></i><i class="h"></i></div>
+      <div>
+        <div class="grad" style="font-size: 42px; font-weight: 600">حملتك<span class="dots"><i></i><i></i><i></i></span></div>
+        <h1 style="font-size: 96px; line-height: 1.2; font-weight: 700">استراحة الخمسة</h1>
+      </div>
+    </section>
+
+    <section style="margin-top: 48px; display: flex; flex-direction: column; gap: 20px">
+      <div class="card">
+        <span class="lbl">الفكرة</span>
+        <p style="font-size: 42px; line-height: 1.5; font-weight: 600">خلّ الساعة 5 عادة القهوة اليومية بالسالمية.</p>
+      </div>
+      <div class="card" style="background: #144074; border-color: #144074; color: #fff">
+        <span class="lbl" style="color: #8CCAEE">الرسالة</span>
+        <p style="font-size: 46px; line-height: 1.45; font-weight: 700">«دوامك يخلص الساعة خمسة. ومساك يبدا من هني.»</p>
+      </div>
+      <div class="card">
+        <span class="lbl">القنوات</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 12px">
+          <span class="chip" style="font-size: 28px; padding: 12px 24px">ريلز إنستغرام</span>
+          <span class="chip" style="font-size: 28px; padding: 12px 24px">تيك توك</span>
+          <span class="chip" style="font-size: 28px; padding: 12px 24px">صنّاع محتوى</span>
+          <span class="chip" style="font-size: 28px; padding: 12px 24px">خرائط جوجل</span>
+        </div>
+      </div>
+      <div class="card">
+        <span class="lbl">4 أسابيع</span>
+        <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px">
+          <div class="wk"><span style="background: #144074"></span><span style="font-size: 32px; font-weight: 700">تشويق</span></div>
+          <div class="wk"><span style="background: #125D99"></span><span style="font-size: 32px; font-weight: 700">إطلاق</span></div>
+          <div class="wk"><span style="background: #2694CF"></span><span style="font-size: 32px; font-weight: 700">صنّاع محتوى</span></div>
+          <div class="wk"><span style="background: #8CC4E8"></span><span style="font-size: 32px; font-weight: 700">تحسين</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top: auto; display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 18px">
+      <button class="btn1" style="height: 140px; font-size: 38px; gap: 18px; box-shadow: 0 18px 40px rgba(20,64,116,.28)"><svg class="i" viewBox="0 0 24 24" style="font-size: 40px"><rect x="3" y="5" width="18" height="14" rx="2.5"></rect><path d="M4 7l8 6 8-6"></path></svg>أرسلوا لي الخطة كاملة</button>
+      <button class="btn2" style="height: 140px; font-size: 34px">مو الحين</button>
+    </section>
+
+    <footer class="muted" style="display: flex; justify-content: flex-end; align-items: center; gap: 12px; height: 56px; margin-top: 24px; font-size: 22px; font-weight: 500"><span class="ring" style="width: 28px; height: 28px"></span><span class="en">60s</span></footer>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,7 @@
+.lbl { font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #125D99; font-size: 14px; }
+.lbl::before {
+  content: ""; display: inline-block; width: .75em; height: .75em; border-radius: 50%;
+  background: #E5418C; margin-inline-end: .5em; vertical-align: -.06em;
+}
+/* Arabic labels drop tracking/uppercase (rtl-arabic-*.html) */
+[dir="rtl"] .lbl { letter-spacing: 0; text-transform: none; }

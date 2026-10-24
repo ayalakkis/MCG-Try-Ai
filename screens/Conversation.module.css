@@ -1,0 +1,18 @@
+/* design/screens/03-conversation.html */
+.body { flex: 1; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 56px; align-items: center; }
+.left { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 30px; }
+/* The timer sits in the gap under the orb so nothing shifts while the AI thinks */
+.orbWrap { position: relative; }
+.timer { position: absolute; top: calc(100% + 2px); left: 50%; transform: translateX(-50%); font-size: 18px; }
+.quote { font-size: 20px; font-weight: 500; color: #4E5F78; }
+.question { font-size: 52px; line-height: 1.12; font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; transition: opacity 300ms; }
+[dir="rtl"] .question { letter-spacing: 0; line-height: 1.35; }
+.answers { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 6px; transition: opacity 300ms; }
+.answer { height: 68px; font-size: 19px; }
+.answers .answer:disabled { opacity: 1; }
+/* While the AI thinks (<2 s) the previous question and answers fade back */
+.thinking .question, .thinking .answers { opacity: .45; }
+
+.right { display: flex; flex-direction: column; gap: 24px; }
+.hold { height: 88px; font-size: 24px; gap: 14px; box-shadow: 0 14px 32px rgba(20,64,116,.28); }
+.hold svg { font-size: 28px; }

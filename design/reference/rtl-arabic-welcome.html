@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>الكشك · الشاشة الرئيسية</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}*{box-sizing:border-box}p,h1,h2,h3{margin:0}
+.root{font-family:'IBM Plex Sans Arabic','Montserrat',ui-sans-serif,system-ui,sans-serif;color:#144074;-webkit-font-smoothing:antialiased}
+.en{font-family:'Montserrat',ui-sans-serif,system-ui,sans-serif}
+button,input{font:inherit;color:inherit}
+.stage{position:relative;overflow:hidden;background:#144074}
+.blob{position:absolute;display:block;border-radius:50%;filter:blur(110px);opacity:.55}
+.canvas{position:relative;background:#fff;display:flex;flex-direction:column;box-shadow:0 30px 90px rgba(10,30,70,.25)}
+.seg{display:flex;background:#EEF2F7;border-radius:999px;gap:4px;padding:6px}
+.seg button,.seg a{border:0;background:transparent;font-weight:600;color:#4E5F78;border-radius:999px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;min-width:var(--segw);height:var(--segh);font-size:var(--segf)}
+.seg .on{background:#144074;color:#fff}
+.btn1{display:inline-flex;align-items:center;justify-content:center;background:#144074;color:#fff;border:0;border-radius:999px;font-weight:600;text-decoration:none;cursor:pointer}
+.card{background:#fff;border:1px solid #E3EAF2;box-shadow:0 1px 2px rgba(16,42,80,.04),0 10px 30px rgba(16,42,80,.06)}
+.muted{color:#4E5F78}
+.grad{background:linear-gradient(270deg,#2694CF,#125D99);-webkit-background-clip:text;background-clip:text;color:transparent}
+.dots{display:inline-flex;align-items:center;gap:.09em;margin-inline-start:.12em;vertical-align:baseline}
+.dots i{display:block;width:.19em;height:.19em;border-radius:50%}
+.dots i:nth-child(1){background:#EF8E0A}.dots i:nth-child(2){background:#E5418C}.dots i:nth-child(3){background:#1EA5E0}
+.lbl{font-weight:700;color:#125D99}
+.lbl::before{content:"";display:inline-block;width:.75em;height:.75em;border-radius:50%;background:#E5418C;margin-inline-end:.5em;vertical-align:-.06em}
+svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.bline{position:absolute;pointer-events:none;overflow:visible}
+.orb{position:relative;border-radius:50%;flex:none}
+.orb>i{position:absolute;display:block;border-radius:50%}
+.orb .g{inset:-24%;background:radial-gradient(circle,rgba(38,148,207,.55) 0%,rgba(140,202,238,.22) 42%,rgba(140,202,238,0) 68%);filter:blur(16px)}
+.orb .c{inset:0;background:radial-gradient(circle at 34% 28%,#fff 0%,#E2F2FC 12%,#8CCAEE 36%,#2694CF 64%,#144074 92%);box-shadow:inset 0 -30px 70px rgba(10,45,95,.32),inset 0 20px 40px rgba(255,255,255,.5)}
+.orb .s{inset:8%;background:conic-gradient(from 0deg,rgba(255,255,255,0) 0deg,rgba(160,220,255,.85) 90deg,rgba(229,65,140,.35) 200deg,rgba(255,255,255,0) 300deg);filter:blur(14px);mix-blend-mode:screen;opacity:.75;animation:orbspin 14s linear infinite}
+.orb .s2{inset:16%;background:conic-gradient(from 180deg,rgba(255,255,255,0) 0deg,rgba(130,205,255,.7) 120deg,rgba(239,142,10,.35) 220deg,rgba(255,255,255,0) 320deg);filter:blur(12px);mix-blend-mode:screen;animation:orbspin 9s linear infinite reverse}
+.orb .h{top:8%;left:19%;width:42%;height:26%;background:radial-gradient(ellipse at center,rgba(255,255,255,.95),rgba(255,255,255,0) 70%);filter:blur(3px)}
+.orb.idle{animation:orbbreathe 5.5s ease-in-out infinite}.orb.idle .g{animation:orbglow 5.5s ease-in-out infinite}
+@keyframes orbspin{to{transform:rotate(360deg)}}
+@keyframes orbbreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+@keyframes orbglow{0%,100%{opacity:.7}50%{opacity:1}}
+</style>
+<div class="root stage" dir="rtl" style="width: 1080px; height: 1920px; padding: 40px; --segw: 108px; --segh: 68px; --segf: 26px">
+  <i class="blob" style="width: 820px; height: 820px; right: -260px; top: -220px; background: #2694CF"></i>
+  <i class="blob" style="width: 760px; height: 760px; left: -300px; top: 560px; background: #125D99"></i>
+  <i class="blob" style="width: 900px; height: 900px; right: -160px; bottom: -400px; background: #1EA5E0"></i>
+  <div class="canvas" style="height: 100%; border-radius: 56px; padding: 44px 64px 40px">
+
+    <header style="display: flex; align-items: center; justify-content: space-between; height: 88px">
+      <img src="../assets/mcg-mark-color.png" alt="MCG" style="height: 60px; width: auto; display: block">
+      <div class="seg">
+        <button class="on">عربي</button>
+        <a class="en" href="#" style="font-size: 24px">EN</a>
+      </div>
+    </header>
+
+    <main style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center">
+      <div style="position: relative; width: 1000px; height: 380px; display: flex; justify-content: center; align-items: center">
+        <svg class="bline" viewBox="0 0 1000 380" style="left: 0; top: 0; width: 1000px; height: 380px" aria-hidden="true"><path d="M960 290 C 850 290 810 140 700 188 S 570 320 500 190 S 340 50 240 160 S 100 270 40 128" fill="none" stroke="#144074" stroke-width="3" stroke-linecap="round"><animate attributeName="d" dur="7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45 0 .55 1;.45 0 .55 1" values="M960 290 C 850 290 810 140 700 188 S 570 320 500 190 S 340 50 240 160 S 100 270 40 128;M960 290 C 850 115 810 227.5 700 191.5 S 570 92.5 500 190 S 340 295 240 212.5 S 100 130 40 128;M960 290 C 850 290 810 140 700 188 S 570 320 500 190 S 340 50 240 160 S 100 270 40 128"></animate></path><circle cx="960" cy="290" r="12" fill="#E5418C"><animate attributeName="r" dur="2.4s" repeatCount="indefinite" values="12;16.2;12"></animate></circle><circle cx="40" cy="128" r="12" fill="#EF8E0A"><animate attributeName="r" dur="2.4s" repeatCount="indefinite" values="12;16.2;12"></animate></circle></svg>
+        <div class="orb idle" style="width: 380px; height: 380px"><i class="g"></i><i class="c"></i><i class="s"></i><i class="s2"></i><i class="h"></i></div>
+      </div>
+      <div class="grad" style="margin-top: 64px; font-size: 76px; font-weight: 600; line-height: 1.3">هلا<span class="dots"><i></i><i></i><i></i></span></div>
+      <h1 style="margin-top: 4px; font-size: 86px; line-height: 1.3; font-weight: 700; max-width: 880px; text-wrap: balance">خبّرنا عن مشروعك، ونسوّي لك حملتك.</h1>
+      <button class="btn1" style="margin-top: 60px; width: 640px; height: 140px; font-size: 42px; gap: 22px; box-shadow: 0 18px 40px rgba(20,64,116,.28)">
+        <svg class="i" viewBox="0 0 24 24" style="font-size: 46px"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"></path><path d="M19 11a7 7 0 0 1-14 0M12 18v3"></path></svg>
+        اضغط مطوّل وتكلّم
+      </button>
+    </main>
+
+    <section style="display: flex; flex-direction: column; gap: 18px; margin-top: 48px">
+      <span class="lbl" style="font-size: 26px">أمثلة</span>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px">
+        <button class="card" style="border-radius: 32px; padding: 28px; display: flex; flex-direction: column; align-items: flex-start; gap: 18px; text-align: right; cursor: pointer">
+          <span style="width: 68px; height: 68px; border-radius: 22px; background: #E8F2FB; color: #125D99; display: flex; align-items: center; justify-content: center; font-size: 34px"><svg class="i" viewBox="0 0 24 24"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9z"></path><path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H17"></path><path d="M8 3v3M12 3v3"></path></svg></span>
+          <span style="font-size: 32px; font-weight: 700; line-height: 1.3">عرض قهوة العصر</span>
+        </button>
+        <button class="card" style="border-radius: 32px; padding: 28px; display: flex; flex-direction: column; align-items: flex-start; gap: 18px; text-align: right; cursor: pointer">
+          <span style="width: 68px; height: 68px; border-radius: 22px; background: #E8F2FB; color: #125D99; display: flex; align-items: center; justify-content: center; font-size: 34px"><svg class="i" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"></path></svg></span>
+          <span style="font-size: 32px; font-weight: 700; line-height: 1.3">حملة رمضان</span>
+        </button>
+        <button class="card" style="border-radius: 32px; padding: 28px; display: flex; flex-direction: column; align-items: flex-start; gap: 18px; text-align: right; cursor: pointer">
+          <span style="width: 68px; height: 68px; border-radius: 22px; background: #E8F2FB; color: #125D99; display: flex; align-items: center; justify-content: center; font-size: 34px"><svg class="i" viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6L5 8z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg></span>
+          <span style="font-size: 32px; font-weight: 700; line-height: 1.3">مبيعات أونلاين</span>
+        </button>
+      </div>
+    </section>
+
+    <footer class="muted" style="display: flex; justify-content: center; align-items: center; height: 56px; margin-top: 28px; font-size: 23px; font-weight: 500">إعلانات. محتوى. فعاليات. ذكاء اصطناعي.</footer>
+  </div>
+</div>
+</body>
+</html>

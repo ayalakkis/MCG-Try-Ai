@@ -1,0 +1,40 @@
+/* design/screens/07-thanks.html */
+.body { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: center; }
+
+.left { display: flex; flex-direction: column; align-items: flex-start; }
+.visual { position: relative; align-self: center; }
+.line { left: 50%; margin-left: -300px; top: 0; width: 600px; height: 260px; }
+.badge {
+  position: absolute; right: -4px; bottom: 6px; width: 72px; height: 72px; border-radius: 50%;
+  background: #144074; color: #fff; border: 5px solid #fff;
+  display: flex; align-items: center; justify-content: center; font-size: 36px;
+}
+.badge svg { stroke-width: 2.4; }
+[dir="rtl"] .badge { right: auto; left: -4px; }
+
+.thanks { margin-top: 56px; font-size: 36px; font-weight: 600; }
+.title { margin-top: 6px; font-size: 64px; line-height: 1.04; font-weight: 700; letter-spacing: -0.025em; }
+[dir="rtl"] .title { letter-spacing: 0; line-height: 1.25; }
+.email { margin-top: 14px; font-size: 20px; font-weight: 500; }
+
+.right { display: flex; flex-direction: column; gap: 22px; }
+.make { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; }
+[dir="rtl"] .make { letter-spacing: 0; }
+.qrs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.card { border-radius: 28px; background: #F1F6FB; padding: 26px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.qrLabel { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; }
+.qrLabel svg { font-size: 24px; }
+
+.bottom { margin-top: 16px; display: flex; align-items: center; gap: 18px; }
+.countdown {
+  position: relative; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center;
+  font-size: 19px; font-weight: 700; flex: none; font-variant-numeric: tabular-nums;
+}
+.cd {
+  position: absolute; inset: 0; display: inline-block; border-radius: 50%;
+  -webkit-mask: radial-gradient(circle, transparent 55%, #000 57%);
+  mask: radial-gradient(circle, transparent 55%, #000 57%);
+  transition: background 1s linear;
+}
+.again { flex: 1; height: 80px; font-size: 22px; gap: 12px; }
+.again svg { font-size: 24px; }

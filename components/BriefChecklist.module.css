@@ -1,0 +1,14 @@
+/* 03-conversation brief checklist */
+.head { display: flex; justify-content: space-between; align-items: center; }
+.count { font-size: 16px; font-weight: 700; color: #125D99; font-family: var(--font-latin); direction: ltr; unicode-bidi: isolate; }
+.box { border: 1px solid #E3EAF2; border-radius: 28px; padding: 8px 24px; background: #F7FAFD; }
+.row { display: flex; align-items: center; gap: 14px; height: 52px; font-size: 19px; font-weight: 600; border-bottom: 1px solid #EBF0F5; }
+.row:last-child { border-bottom: 0; }
+.value { margin-inline-start: auto; font-weight: 500; color: #4E5F78; font-size: 17px; }
+.current { color: #125D99; }
+.current .value { color: #125D99; }
+.pending { color: #8796AB; }
+.ok { width: 30px; height: 30px; border-radius: 50%; background: #144074; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; flex: none; }
+.ok svg { stroke-width: 2.6; }
+.spinner { width: 30px; height: 30px; border-width: 3px; }
+.empty { width: 30px; height: 30px; border-radius: 50%; border: 1.5px dashed #C7D6E6; flex: none; }

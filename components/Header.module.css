@@ -1,0 +1,14 @@
+.header { display: flex; align-items: center; justify-content: space-between; height: 64px; position: relative; z-index: 2; }
+.logo { height: 44px; width: auto; display: block; }
+.right { display: flex; align-items: center; gap: 12px; }
+.startOver { height: 52px; padding: 0 20px; font-size: 16px; gap: 8px; }
+.startOver svg { font-size: 18px; }
+
+.seg { display: flex; background: #EEF2F7; border-radius: 999px; gap: 3px; padding: 4px; }
+.seg button {
+  border: 0; background: transparent; font-weight: 600; color: #4E5F78; border-radius: 999px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; min-width: 72px; height: 48px; font-size: 16px;
+}
+.seg .on { background: #144074; color: #fff; }
+.en { font-family: var(--font-latin); }
+.ar { font-family: var(--font-ar); font-size: 17px !important; }

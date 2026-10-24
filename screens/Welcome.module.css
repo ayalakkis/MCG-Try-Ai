@@ -1,0 +1,12 @@
+/* design/screens/01-welcome.html */
+.body { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 48px; align-items: center; }
+.visual { position: relative; height: 480px; display: flex; align-items: center; justify-content: center; }
+.line { inset-inline-start: -48px; top: 0; width: 600px; height: 480px; }
+
+.content { display: flex; flex-direction: column; }
+.hello { font-size: 44px; font-weight: 600; }
+.headline { margin-top: 6px; font-size: 54px; line-height: 1.08; font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; }
+.talk { margin-top: 40px; align-self: flex-start; width: 380px; height: 88px; font-size: 24px; gap: 14px; box-shadow: 0 14px 32px rgba(20,64,116,.28); }
+.talk svg { font-size: 28px; }
+
+.footer { text-align: center; font-size: 14px; font-weight: 500; color: #4E5F78; }

@@ -1,0 +1,10 @@
+/* .wave from design/screens/02-listening.html */
+.wave { display: flex; align-items: center; }
+.wave i { display: block; background: #2694CF; border-radius: 99px; animation: wv 1s ease-in-out infinite; }
+/* Live mic levels replace the stand-in keyframes */
+.live i { animation: none; transition: transform 80ms linear; }
+@media (prefers-reduced-motion: reduce) {
+  .wave i { animation: none; transform: scaleY(.6) !important; transition: none; }
+}
+
+@keyframes wv { 0%, 100% { transform: scaleY(.35); } 50% { transform: scaleY(1); } }

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>iPad · Watch us create</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}*{box-sizing:border-box}p,h1,h2,h3{margin:0}
+.root{font-family:'Montserrat',ui-sans-serif,system-ui,sans-serif;color:#144074;-webkit-font-smoothing:antialiased}
+.ar{font-family:'IBM Plex Sans Arabic','Montserrat',sans-serif}
+button,input{font:inherit;color:inherit}
+.stage{position:relative;overflow:hidden;background:#144074}
+.blob{position:absolute;display:block;border-radius:50%;filter:blur(90px);opacity:.55}
+.canvas{position:relative;background:#fff;display:flex;flex-direction:column;box-shadow:0 20px 70px rgba(10,30,70,.25)}
+.seg{display:flex;background:#EEF2F7;border-radius:999px;gap:3px;padding:4px}
+.seg button,.seg a{border:0;background:transparent;font-weight:600;color:#4E5F78;border-radius:999px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;min-width:72px;height:48px;font-size:16px}
+.seg .on{background:#144074;color:#fff}
+.btn2{display:inline-flex;align-items:center;justify-content:center;background:#fff;color:#144074;border:1.5px solid #D9E2EC;border-radius:999px;font-weight:600;text-decoration:none;cursor:pointer}
+.card{background:#fff;border:1px solid #E3EAF2;box-shadow:0 1px 2px rgba(16,42,80,.04),0 8px 24px rgba(16,42,80,.06)}
+.chip{display:inline-flex;align-items:center;background:#E8F2FB;color:#125D99;border-radius:999px;font-weight:600;white-space:nowrap}
+.grad{background:linear-gradient(90deg,#2694CF,#125D99);-webkit-background-clip:text;background-clip:text;color:transparent}
+.dots{display:inline-flex;align-items:center;gap:.09em;margin-inline-start:.12em;vertical-align:baseline}
+.dots i{display:block;width:.19em;height:.19em;border-radius:50%}
+.dots i:nth-child(1){background:#EF8E0A}.dots i:nth-child(2){background:#E5418C}.dots i:nth-child(3){background:#1EA5E0}
+svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.orb{position:relative;border-radius:50%;flex:none}
+.orb>i{position:absolute;display:block;border-radius:50%}
+.orb .g{inset:-24%;background:radial-gradient(circle,rgba(38,148,207,.55) 0%,rgba(140,202,238,.22) 42%,rgba(140,202,238,0) 68%);filter:blur(16px)}
+.orb .c{inset:0;background:radial-gradient(circle at 34% 28%,#fff 0%,#E2F2FC 12%,#8CCAEE 36%,#2694CF 64%,#144074 92%);box-shadow:inset 0 -30px 70px rgba(10,45,95,.32),inset 0 20px 40px rgba(255,255,255,.5)}
+.orb .s{inset:8%;background:conic-gradient(from 0deg,rgba(255,255,255,0) 0deg,rgba(160,220,255,.85) 90deg,rgba(229,65,140,.35) 200deg,rgba(255,255,255,0) 300deg);filter:blur(14px);mix-blend-mode:screen;opacity:1;animation:orbspin 2.2s linear infinite}
+.orb .s2{inset:16%;background:conic-gradient(from 180deg,rgba(255,255,255,0) 0deg,rgba(130,205,255,.7) 120deg,rgba(239,142,10,.35) 220deg,rgba(255,255,255,0) 320deg);filter:blur(12px);mix-blend-mode:screen;animation:orbspin 3.2s linear infinite reverse}
+.orb .h{top:8%;left:19%;width:42%;height:26%;background:radial-gradient(ellipse at center,rgba(255,255,255,.95),rgba(255,255,255,0) 70%);filter:blur(3px)}
+.orb .o{inset:-14%;border:1.5px dashed rgba(38,148,207,.38);animation:orbspin 24s linear infinite}
+.orb .o2{inset:-30%;border:1px solid rgba(38,148,207,.18);animation:orbspin 40s linear infinite reverse}
+.orb .p{inset:-14%;animation:orbspin 7s linear infinite}
+.orb .p::before{content:"";position:absolute;top:-6px;left:50%;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:#EF8E0A;box-shadow:0 0 16px 5px rgba(239,142,10,.5)}
+.orb .p+.p::before{background:#E5418C;box-shadow:0 0 14px 4px rgba(229,65,140,.45)}
+.orb .p+.p+.p::before{background:#1EA5E0;box-shadow:0 0 14px 4px rgba(30,165,224,.45)}
+.orb.create{animation:orbbreathe 2.6s ease-in-out infinite}.orb.create .c{animation:orbhue 6s ease-in-out infinite}.orb.create .g{inset:-40%;animation:orbglow 2.6s ease-in-out infinite}
+.shim{background:linear-gradient(90deg,#144074 0%,#144074 40%,#2694CF 50%,#144074 60%,#144074 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shim 2.4s linear infinite}
+.spin{display:inline-block;flex:none;border-radius:50%;border-style:solid;border-color:#DCEBF7;border-top-color:#125D99;animation:orbspin .9s linear infinite}
+.float{animation:float 6s ease-in-out infinite}
+.st{display:flex;align-items:center;gap:18px;height:72px}
+.ok{width:38px;height:38px;border-radius:50%;background:#144074;color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none}
+@keyframes orbspin{to{transform:rotate(360deg)}}
+@keyframes orbbreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+@keyframes orbglow{0%,100%{opacity:.7}50%{opacity:1}}
+@keyframes orbhue{0%,100%{filter:saturate(1) brightness(1)}50%{filter:saturate(1.3) brightness(1.12)}}
+@keyframes shim{from{background-position:100% 0}to{background-position:-150% 0}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes fill{from{width:44%}to{width:62%}}
+</style>
+<div class="root stage" style="width: 1366px; height: 1024px; padding: 20px">
+  <i class="blob" style="width: 700px; height: 700px; left: -220px; top: -260px; background: #2694CF"></i>
+  <i class="blob" style="width: 640px; height: 640px; right: -240px; top: 300px; background: #125D99"></i>
+  <i class="blob" style="width: 700px; height: 700px; left: 300px; bottom: -480px; background: #1EA5E0"></i>
+  <div class="canvas" style="height: 100%; border-radius: 40px; padding: 28px 48px 40px; overflow: hidden">
+    <header style="display: flex; align-items: center; justify-content: space-between; height: 64px; position: relative; z-index: 2">
+      <img src="../assets/mcg-mark-color.png" alt="MCG" style="height: 44px; width: auto; display: block">
+      <div style="display: flex; align-items: center; gap: 12px">
+        <a class="btn2" href="01-welcome.html" style="height: 52px; padding: 0 20px; font-size: 16px; gap: 8px"><svg class="i" viewBox="0 0 24 24" style="font-size: 18px"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path></svg>Start over</a>
+        <div class="seg"><button class="on">EN</button><button class="ar" style="font-size: 17px">عربي</button></div>
+      </div>
+    </header>
+
+    <div style="flex: 1; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 40px; align-items: center">
+      <div style="position: relative; height: 680px; display: flex; align-items: center; justify-content: center">
+        <i style="position: absolute; display: block; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(38,148,207,.2) 0%, rgba(38,148,207,0) 62%)"></i>
+        <div class="orb create" style="width: 360px; height: 360px"><i class="g"></i><i class="o2"></i><i class="o"></i><i class="c"></i><i class="s"></i><i class="s2"></i><i class="h"></i><i class="p"></i><i class="p" style="animation-duration: 11s; animation-delay: -4s; inset: -24%"></i><i class="p" style="animation-duration: 15s; animation-direction: reverse; animation-delay: -2s; inset: -32%"></i></div>
+        <span class="chip float" style="position: absolute; left: 10px; top: 80px; font-size: 18px; padding: 10px 18px; background: rgba(255,255,255,.92); border: 1px solid #D3E8F6; box-shadow: 0 8px 24px rgba(20,64,116,.12)">Salmiya</span>
+        <span class="chip float" style="position: absolute; right: 0; top: 130px; font-size: 18px; padding: 10px 18px; background: rgba(255,255,255,.92); border: 1px solid #D3E8F6; box-shadow: 0 8px 24px rgba(20,64,116,.12); animation-delay: -2s">After work</span>
+        <span class="chip float" style="position: absolute; left: 30px; bottom: 120px; font-size: 18px; padding: 10px 18px; background: rgba(255,255,255,.92); border: 1px solid #D3E8F6; box-shadow: 0 8px 24px rgba(20,64,116,.12); animation-delay: -3.5s">5–8 PM</span>
+        <span class="chip float" style="position: absolute; right: 20px; bottom: 80px; font-size: 18px; padding: 10px 18px; background: rgba(255,255,255,.92); border: 1px solid #D3E8F6; box-shadow: 0 8px 24px rgba(20,64,116,.12); animation-delay: -1s">Reels</span>
+      </div>
+
+      <div style="display: flex; flex-direction: column; position: relative; z-index: 2">
+        <div class="grad" style="font-size: 34px; font-weight: 600">Watch us create<span class="dots"><i></i><i></i><i></i></span></div>
+        <h1 style="margin-top: 6px; font-size: 52px; line-height: 1.08; font-weight: 700; letter-spacing: -0.02em">Building your campaign</h1>
+        <div class="card" style="margin-top: 40px; border-radius: 28px; padding: 8px 28px">
+          <div class="st" style="border-bottom: 1px solid #EBF0F5"><span class="ok"><svg class="i" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span style="font-size: 22px; font-weight: 600">Your brief</span></div>
+          <div class="st" style="border-bottom: 1px solid #EBF0F5"><span class="ok"><svg class="i" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span style="font-size: 22px; font-weight: 600">Your audience</span></div>
+          <div class="st" style="border-bottom: 1px solid #EBF0F5"><span class="spin" style="width: 38px; height: 38px; border-width: 4px"></span><span class="shim" style="font-size: 24px; font-weight: 700">The big idea</span></div>
+          <div class="st"><span style="width: 38px; height: 38px; border-radius: 50%; border: 2px dashed #C7D6E6; flex: none"></span><span style="font-size: 22px; font-weight: 600; color: #8796AB">Channels &amp; timeline</span></div>
+        </div>
+        <a href="05-preview.html" aria-label="Progress" style="display: block; margin-top: 32px; height: 10px; border-radius: 99px; background: #E3EDF6; overflow: hidden"><span style="display: block; height: 100%; width: 58%; border-radius: 99px; background: linear-gradient(90deg, #2694CF, #125D99 60%, #144074); animation: fill 6s ease-in-out infinite alternate"></span></a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,79 @@
+/* Design tokens — HANDOFF.md §3. Values copied verbatim from design/screens/*.html */
+:root {
+  --blue-dark: #144074;
+  --blue: #125D99;
+  --cyan: #2694CF;
+  --blue-light: #8CC4E8;
+  --tint: #E8F2FB;
+  --surface-2: #F7FAFD;
+  --surface-3: #F1F6FB;
+  --border: #E3EAF2;
+  --border-strong: #D9E2EC;
+  --divider: #EBF0F5;
+  --seg-bg: #EEF2F7;
+  --text-muted: #4E5F78;
+  --text-faint: #8796AB;
+  --brand-orange: #EF8E0A;
+  --brand-pink: #E5418C;
+  --brand-cyan-dot: #1EA5E0;
+  --white: #fff;
+
+  --greeting-gradient: linear-gradient(90deg, #2694CF, #125D99);
+  --card-shadow: 0 1px 2px rgba(16, 42, 80, .04), 0 8px 24px rgba(16, 42, 80, .06);
+  --primary-shadow: 0 14px 32px rgba(20, 64, 116, .28);
+  --canvas-shadow: 0 20px 70px rgba(10, 30, 70, .25);
+
+  --radius-panel: 40px;
+  --radius-pill: 999px;
+
+  --font-latin: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  --font-ar: var(--font-plex-arabic), var(--font-montserrat), sans-serif;
+
+  --app-w: 1366px;
+  --app-h: 1024px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--blue-dark);
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+p, h1, h2, h3, h4 { margin: 0; }
+button, input { font: inherit; color: inherit; }
+input { user-select: text; -webkit-user-select: text; }
+
+/* Brand text helpers used across screens */
+.grad {
+  background: var(--greeting-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+[dir="rtl"] .grad { background: linear-gradient(270deg, #2694CF, #125D99); -webkit-background-clip: text; background-clip: text; }
+.muted { color: var(--text-muted); }
+
+/* Line icons (24×24 viewBox), sized by font-size */
+svg.i {
+  width: 1em; height: 1em; fill: none; stroke: currentColor;
+  stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none;
+}
+
+/* Global keyframes are only for global classes; CSS Modules must define their own
+   (module animation names are hashed and cannot reach these). */
+@keyframes orbspin { to { transform: rotate(360deg); } }
+
+.spin {
+  display: inline-block; flex: none; border-radius: 50%; border-style: solid;
+  border-color: #DCEBF7; border-top-color: #125D99; animation: orbspin .9s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spin { animation-duration: 2.4s; }
+}

@@ -1,0 +1,5 @@
+.dots { display: inline-flex; align-items: center; gap: .09em; margin-inline-start: .12em; vertical-align: baseline; }
+.dots i { display: block; width: .19em; height: .19em; border-radius: 50%; }
+.dots i:nth-child(1) { background: #EF8E0A; }
+.dots i:nth-child(2) { background: #E5418C; }
+.dots i:nth-child(3) { background: #1EA5E0; }

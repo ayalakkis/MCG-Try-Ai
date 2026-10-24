@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>iPad · Thank you</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}*{box-sizing:border-box}p,h1,h2,h3{margin:0}
+.root{font-family:'Montserrat',ui-sans-serif,system-ui,sans-serif;color:#144074;-webkit-font-smoothing:antialiased}
+.ar{font-family:'IBM Plex Sans Arabic','Montserrat',sans-serif}
+button,input{font:inherit;color:inherit}
+.stage{position:relative;overflow:hidden;background:#144074}
+.blob{position:absolute;display:block;border-radius:50%;filter:blur(90px);opacity:.55}
+.canvas{position:relative;background:#fff;display:flex;flex-direction:column;box-shadow:0 20px 70px rgba(10,30,70,.25)}
+.seg{display:flex;background:#EEF2F7;border-radius:999px;gap:3px;padding:4px}
+.seg button,.seg a{border:0;background:transparent;font-weight:600;color:#4E5F78;border-radius:999px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;min-width:72px;height:48px;font-size:16px}
+.seg .on{background:#144074;color:#fff}
+.btn1{display:inline-flex;align-items:center;justify-content:center;background:#144074;color:#fff;border:0;border-radius:999px;font-weight:600;text-decoration:none;cursor:pointer}
+.muted{color:#4E5F78}
+.grad{background:linear-gradient(90deg,#2694CF,#125D99);-webkit-background-clip:text;background-clip:text;color:transparent}
+.dots{display:inline-flex;align-items:center;gap:.09em;margin-inline-start:.12em;vertical-align:baseline}
+.dots i{display:block;width:.19em;height:.19em;border-radius:50%}
+.dots i:nth-child(1){background:#EF8E0A}.dots i:nth-child(2){background:#E5418C}.dots i:nth-child(3){background:#1EA5E0}
+svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.bline{position:absolute;pointer-events:none;overflow:visible}
+.orb{position:relative;border-radius:50%;flex:none}
+.orb>i{position:absolute;display:block;border-radius:50%}
+.orb .g{inset:-24%;background:radial-gradient(circle,rgba(38,148,207,.55) 0%,rgba(140,202,238,.22) 42%,rgba(140,202,238,0) 68%);filter:blur(16px)}
+.orb .c{inset:0;background:radial-gradient(circle at 34% 28%,#fff 0%,#E2F2FC 12%,#8CCAEE 36%,#2694CF 64%,#144074 92%);box-shadow:inset 0 -30px 70px rgba(10,45,95,.32),inset 0 20px 40px rgba(255,255,255,.5)}
+.orb .s{inset:8%;background:conic-gradient(from 0deg,rgba(255,255,255,0) 0deg,rgba(160,220,255,.85) 90deg,rgba(229,65,140,.35) 200deg,rgba(255,255,255,0) 300deg);filter:blur(14px);mix-blend-mode:screen;opacity:.75;animation:orbspin 14s linear infinite}
+.orb .s2{inset:16%;background:conic-gradient(from 180deg,rgba(255,255,255,0) 0deg,rgba(130,205,255,.7) 120deg,rgba(239,142,10,.35) 220deg,rgba(255,255,255,0) 320deg);filter:blur(12px);mix-blend-mode:screen;animation:orbspin 9s linear infinite reverse}
+.orb .h{top:8%;left:19%;width:42%;height:26%;background:radial-gradient(ellipse at center,rgba(255,255,255,.95),rgba(255,255,255,0) 70%);filter:blur(3px)}
+.orb.idle{animation:orbbreathe 5.5s ease-in-out infinite}.orb.idle .g{animation:orbglow 5.5s ease-in-out infinite}
+.qr{border-radius:16px;background-color:#fff;background-image:repeating-conic-gradient(#144074 0 25%,#fff 0 50%);background-size:16px 16px;position:relative;border:10px solid #fff;outline:1.5px solid #D9E2EC}
+.qrc{position:absolute;width:38px;height:38px;border:7px solid #144074;background:#fff;border-radius:8px}
+.cd{display:inline-block;border-radius:50%;background:conic-gradient(#144074 0 60%,#DFE9F3 60% 100%);-webkit-mask:radial-gradient(circle,transparent 55%,#000 57%);mask:radial-gradient(circle,transparent 55%,#000 57%)}
+@keyframes orbspin{to{transform:rotate(360deg)}}
+@keyframes orbbreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+@keyframes orbglow{0%,100%{opacity:.7}50%{opacity:1}}
+</style>
+<div class="root stage" style="width: 1366px; height: 1024px; padding: 20px">
+  <i class="blob" style="width: 700px; height: 700px; left: -220px; top: -260px; background: #2694CF"></i>
+  <i class="blob" style="width: 640px; height: 640px; right: -240px; top: 300px; background: #125D99"></i>
+  <i class="blob" style="width: 700px; height: 700px; left: 300px; bottom: -480px; background: #1EA5E0"></i>
+  <div class="canvas" style="height: 100%; border-radius: 40px; padding: 28px 48px 36px">
+    <header style="display: flex; align-items: center; justify-content: space-between; height: 64px">
+      <img src="../assets/mcg-mark-color.png" alt="MCG" style="height: 44px; width: auto; display: block">
+      <div class="seg"><button class="on">EN</button><button class="ar" style="font-size: 17px">عربي</button></div>
+    </header>
+
+    <div style="flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: center">
+      <div style="display: flex; flex-direction: column; align-items: flex-start">
+        <div style="position: relative; align-self: center">
+          <svg class="bline" viewBox="0 0 600 260" style="left: 50%; margin-left: -300px; top: 0; width: 600px; height: 260px" aria-hidden="true"><path d="M20 80 C 90 80 120 210 200 170 S 270 60 300 130 S 400 250 470 180 S 560 60 580 190" fill="none" stroke="#144074" stroke-width="2.5" stroke-linecap="round"><animate attributeName="d" dur="7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45 0 .55 1;.45 0 .55 1" values="M20 80 C 90 80 120 210 200 170 S 270 60 300 130 S 400 250 470 180 S 560 60 580 190;M20 80 C 90 167.5 120 70 200 100 S 270 182.5 300 130 S 400 40 470 92.5 S 560 182.5 580 190;M20 80 C 90 80 120 210 200 170 S 270 60 300 130 S 400 250 470 180 S 560 60 580 190"></animate></path><circle cx="20" cy="80" r="9" fill="#E5418C"><animate attributeName="r" dur="2.4s" repeatCount="indefinite" values="9;12.2;9"></animate></circle><circle cx="580" cy="190" r="9" fill="#EF8E0A"><animate attributeName="r" dur="2.4s" repeatCount="indefinite" values="9;12.2;9"></animate></circle></svg>
+          <div class="orb idle" style="width: 260px; height: 260px"><i class="g"></i><i class="c"></i><i class="s"></i><i class="s2"></i><i class="h"></i></div>
+          <span style="position: absolute; right: -4px; bottom: 6px; width: 72px; height: 72px; border-radius: 50%; background: #144074; color: #fff; border: 5px solid #fff; display: flex; align-items: center; justify-content: center; font-size: 36px"><svg class="i" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>
+        </div>
+        <div class="grad" style="margin-top: 56px; font-size: 36px; font-weight: 600">Thank you, Sara<span class="dots"><i></i><i></i><i></i></span></div>
+        <h1 style="margin-top: 6px; font-size: 64px; line-height: 1.04; font-weight: 700; letter-spacing: -0.025em">It's on its way.</h1>
+        <p class="muted" style="margin-top: 14px; font-size: 20px; font-weight: 500">sara.alenezi@gmail.com</p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 22px">
+        <h2 style="font-size: 30px; font-weight: 700; letter-spacing: -0.02em">Let's make it happen</h2>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+          <div style="border-radius: 28px; background: #F1F6FB; padding: 26px; display: flex; flex-direction: column; align-items: center; gap: 16px">
+            <div class="qr" style="width: 160px; height: 160px" aria-label="WhatsApp QR code"><i class="qrc" style="left: 0; top: 0"></i><i class="qrc" style="right: 0; top: 0"></i><i class="qrc" style="left: 0; bottom: 0"></i></div>
+            <span style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700"><svg class="i" viewBox="0 0 24 24" style="font-size: 24px"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"></path><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 .8a4 4 0 0 1-1.8-1.8l.8-1-1-2z"></path></svg>WhatsApp</span>
+          </div>
+          <div style="border-radius: 28px; background: #F1F6FB; padding: 26px; display: flex; flex-direction: column; align-items: center; gap: 16px">
+            <div class="qr" style="width: 160px; height: 160px; background-size: 13px 13px, 19px 19px" aria-label="Instagram QR code"><i class="qrc" style="left: 0; top: 0"></i><i class="qrc" style="right: 0; top: 0"></i><i class="qrc" style="left: 0; bottom: 0"></i></div>
+            <span style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700"><svg class="i" viewBox="0 0 24 24" style="font-size: 24px"><rect x="4" y="4" width="16" height="16" rx="5"></rect><circle cx="12" cy="12" r="3.6"></circle><circle cx="17" cy="7" r=".6"></circle></svg>Instagram</span>
+          </div>
+        </div>
+        <div style="margin-top: 16px; display: flex; align-items: center; gap: 18px">
+          <span style="position: relative; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 700; flex: none"><span class="cd" style="position: absolute; inset: 0"></span>12</span>
+          <a class="btn1" href="01-welcome.html" style="flex: 1; height: 80px; font-size: 22px; gap: 12px"><svg class="i" viewBox="0 0 24 24" style="font-size: 24px"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path></svg>Start over</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

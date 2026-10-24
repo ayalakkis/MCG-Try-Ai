@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>iPad · Conversation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}*{box-sizing:border-box}p,h1,h2,h3{margin:0}
+.root{font-family:'Montserrat',ui-sans-serif,system-ui,sans-serif;color:#144074;-webkit-font-smoothing:antialiased}
+.ar{font-family:'IBM Plex Sans Arabic','Montserrat',sans-serif}
+button,input{font:inherit;color:inherit}
+.stage{position:relative;overflow:hidden;background:#144074}
+.blob{position:absolute;display:block;border-radius:50%;filter:blur(90px);opacity:.55}
+.canvas{position:relative;background:#fff;display:flex;flex-direction:column;box-shadow:0 20px 70px rgba(10,30,70,.25)}
+.seg{display:flex;background:#EEF2F7;border-radius:999px;gap:3px;padding:4px}
+.seg button,.seg a{border:0;background:transparent;font-weight:600;color:#4E5F78;border-radius:999px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;min-width:72px;height:48px;font-size:16px}
+.seg .on{background:#144074;color:#fff}
+.btn1{display:inline-flex;align-items:center;justify-content:center;background:#144074;color:#fff;border:0;border-radius:999px;font-weight:600;text-decoration:none;cursor:pointer}
+.btn2{display:inline-flex;align-items:center;justify-content:center;background:#fff;color:#144074;border:1.5px solid #D9E2EC;border-radius:999px;font-weight:600;text-decoration:none;cursor:pointer}
+.muted{color:#4E5F78}
+.lbl{font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#125D99}
+.lbl::before{content:"";display:inline-block;width:.75em;height:.75em;border-radius:50%;background:#E5418C;margin-inline-end:.5em;vertical-align:-.06em}
+.ring{display:inline-block;flex:none;border-radius:50%;background:conic-gradient(#2694CF 0 72%,#DFE9F3 72% 100%);-webkit-mask:radial-gradient(circle,transparent 52%,#000 54%);mask:radial-gradient(circle,transparent 52%,#000 54%)}
+svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.orb{position:relative;border-radius:50%;flex:none}
+.orb>i{position:absolute;display:block;border-radius:50%}
+.orb .g{inset:-24%;background:radial-gradient(circle,rgba(38,148,207,.55) 0%,rgba(140,202,238,.22) 42%,rgba(140,202,238,0) 68%);filter:blur(16px)}
+.orb .c{inset:0;background:radial-gradient(circle at 34% 28%,#fff 0%,#E2F2FC 12%,#8CCAEE 36%,#2694CF 64%,#144074 92%);box-shadow:inset 0 -24px 56px rgba(10,45,95,.32),inset 0 16px 32px rgba(255,255,255,.5)}
+.orb .s{inset:8%;background:conic-gradient(from 0deg,rgba(255,255,255,0) 0deg,rgba(160,220,255,.85) 90deg,rgba(229,65,140,.35) 200deg,rgba(255,255,255,0) 300deg);filter:blur(12px);mix-blend-mode:screen;opacity:.75;animation:orbspin 14s linear infinite}
+.orb .s2{inset:16%;background:conic-gradient(from 180deg,rgba(255,255,255,0) 0deg,rgba(130,205,255,.7) 120deg,rgba(239,142,10,.35) 220deg,rgba(255,255,255,0) 320deg);filter:blur(10px);mix-blend-mode:screen;animation:orbspin 9s linear infinite reverse}
+.orb .h{top:8%;left:19%;width:42%;height:26%;background:radial-gradient(ellipse at center,rgba(255,255,255,.95),rgba(255,255,255,0) 70%);filter:blur(3px)}
+.orb.speak{animation:orbspeak 1.4s ease-in-out infinite}.orb.speak .g{animation:orbglow 1.4s ease-in-out infinite}
+.wave{display:flex;align-items:center}.wave i{display:block;background:#2694CF;border-radius:99px;animation:wv 1s ease-in-out infinite}
+.spin{display:inline-block;flex:none;border-radius:50%;border-style:solid;border-color:#DCEBF7;border-top-color:#125D99;animation:orbspin .9s linear infinite}
+.br{display:flex;align-items:center;gap:14px;height:52px;font-size:19px;font-weight:600;border-bottom:1px solid #EBF0F5}
+.br:last-child{border-bottom:0}
+.ok{width:30px;height:30px;border-radius:50%;background:#144074;color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex:none}
+.br span:last-child{margin-inline-start:auto;font-weight:500;color:#4E5F78;font-size:17px}
+@keyframes orbspin{to{transform:rotate(360deg)}}
+@keyframes orbglow{0%,100%{opacity:.7}50%{opacity:1}}
+@keyframes orbspeak{0%,100%{transform:scale(1)}12%{transform:scale(1.06)}24%{transform:scale(1.01)}36%{transform:scale(1.07)}52%{transform:scale(1)}68%{transform:scale(1.05)}84%{transform:scale(1.01)}}
+@keyframes wv{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+</style>
+<div class="root stage" style="width: 1366px; height: 1024px; padding: 20px">
+  <i class="blob" style="width: 700px; height: 700px; left: -220px; top: -260px; background: #2694CF"></i>
+  <i class="blob" style="width: 640px; height: 640px; right: -240px; top: 300px; background: #125D99"></i>
+  <i class="blob" style="width: 700px; height: 700px; left: 300px; bottom: -480px; background: #1EA5E0"></i>
+  <div class="canvas" style="height: 100%; border-radius: 40px; padding: 28px 48px 36px">
+    <header style="display: flex; align-items: center; justify-content: space-between; height: 64px">
+      <img src="../assets/mcg-mark-color.png" alt="MCG" style="height: 44px; width: auto; display: block">
+      <div style="display: flex; align-items: center; gap: 12px">
+        <a class="btn2" href="01-welcome.html" style="height: 52px; padding: 0 20px; font-size: 16px; gap: 8px"><svg class="i" viewBox="0 0 24 24" style="font-size: 18px"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path></svg>Start over</a>
+        <div class="seg"><button class="on">EN</button><button class="ar" style="font-size: 17px">عربي</button></div>
+      </div>
+    </header>
+
+    <div style="flex: 1; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 56px; align-items: center">
+      <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 30px">
+        <div class="orb speak" style="width: 220px; height: 220px"><i class="g"></i><i class="c"></i><i class="s"></i><i class="s2"></i><i class="h"></i></div>
+        <p class="muted" style="font-size: 20px; font-weight: 500">“Young professionals, right after work.”</p>
+        <h1 style="font-size: 52px; line-height: 1.12; font-weight: 700; letter-spacing: -0.02em; text-wrap: balance">What's your monthly budget?</h1>
+        <div style="width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 6px">
+          <button class="btn2" style="height: 68px; font-size: 19px">Under KWD 500</button>
+          <button class="btn2" style="height: 68px; font-size: 19px">KWD 500–1,500</button>
+          <button class="btn2" style="height: 68px; font-size: 19px">KWD 1,500+</button>
+          <button class="btn2" style="height: 68px; font-size: 19px">Not sure</button>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 24px">
+        <div style="display: flex; justify-content: space-between; align-items: center"><span class="lbl" style="font-size: 14px">Your brief</span><span style="font-size: 16px; font-weight: 700; color: #125D99">4 / 6</span></div>
+        <div style="border: 1px solid #E3EAF2; border-radius: 28px; padding: 8px 24px; background: #F7FAFD">
+          <div class="br"><span class="ok"><svg class="i" viewBox="0 0 24 24" style="stroke-width: 2.6"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>Business<span>Specialty café</span></div>
+          <div class="br"><span class="ok"><svg class="i" viewBox="0 0 24 24" style="stroke-width: 2.6"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>Goal<span>Evening visits</span></div>
+          <div class="br"><span class="ok"><svg class="i" viewBox="0 0 24 24" style="stroke-width: 2.6"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>Audience<span>Young pros</span></div>
+          <div class="br"><span class="ok"><svg class="i" viewBox="0 0 24 24" style="stroke-width: 2.6"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>Location<span>Salmiya</span></div>
+          <div class="br" style="color: #125D99"><span class="spin" style="width: 30px; height: 30px; border-width: 3px"></span>Budget<span style="color: #125D99">Now</span></div>
+          <div class="br" style="color: #8796AB"><span style="width: 30px; height: 30px; border-radius: 50%; border: 1.5px dashed #C7D6E6; flex: none"></span>Timing<span></span></div>
+        </div>
+        <a class="btn1" href="04-create.html" style="height: 88px; font-size: 24px; gap: 14px; box-shadow: 0 14px 32px rgba(20,64,116,.28)">
+          <svg class="i" viewBox="0 0 24 24" style="font-size: 28px"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"></path><path d="M19 11a7 7 0 0 1-14 0M12 18v3"></path></svg>Hold to answer
+        </a>
+      </div>
+    </div>
+
+    <footer class="muted" style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; font-size: 14px; font-weight: 500"><span class="ring" style="width: 20px; height: 20px"></span>60s</footer>
+  </div>
+</div>
+</body>
+</html>

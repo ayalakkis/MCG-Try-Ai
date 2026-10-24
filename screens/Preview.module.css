@@ -1,0 +1,80 @@
+/*
+ * PREVIEW (redesigned for MCG): strategy line + parameters as a quiet row of facts, then a
+ * department list beside one spotlight. Few boxes: only the spotlight has a surface.
+ * Tokens and type from design/screens/05-preview.html.
+ */
+.body { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 20px; padding-top: 10px; }
+
+/* ---------- top: the strategy ---------- */
+.top { display: flex; flex-direction: column; }
+.intro { display: flex; align-items: center; gap: 14px; }
+.yourStrategy { font-size: 24px; font-weight: 600; }
+.headline {
+  margin-top: 8px; font-size: 40px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; max-width: 1080px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+[dir="rtl"] .headline { letter-spacing: 0; line-height: 1.35; }
+
+/* Parameters: one line of facts divided by hairlines, no box */
+.facts { margin: 16px 0 0; display: flex; flex-wrap: nowrap; }
+.facts > div { min-width: 0; padding: 0 22px; border-inline-start: 1px solid #DCE5EE; }
+.facts > div:first-child { padding-inline-start: 0; border-inline-start: 0; }
+.facts > div:last-child { flex: none; }
+.facts dt { font-size: 12.5px; font-weight: 600; color: #8796AB; }
+.facts dd { margin: 2px 0 0; font-size: 15.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px; }
+
+/* ---------- explore: list + spotlight ---------- */
+.explore { flex: 1; min-height: 0; display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 28px; }
+
+.list { display: flex; flex-direction: column; gap: 4px; min-height: 0; }
+.item, .itemOn {
+  position: relative; display: flex; align-items: center; gap: 14px; flex: 1; min-height: 0;
+  padding: 0 16px; border: 0; border-radius: 18px; background: transparent; color: inherit;
+  font: inherit; text-align: start; cursor: pointer; overflow: hidden; transition: background 200ms ease;
+}
+.item:hover { background: #F3F7FB; }
+.itemOn { background: #144074; color: #fff; }
+.item:focus-visible, .itemOn:focus-visible { outline: 3px solid #2694CF; outline-offset: 2px; }
+.itemIcon { width: 40px; height: 40px; border-radius: 13px; background: #E8F2FB; color: #125D99; display: flex; align-items: center; justify-content: center; font-size: 21px; flex: none; }
+.itemOn .itemIcon { background: rgba(255,255,255,.14); color: #fff; }
+.itemText { display: flex; flex-direction: column; min-width: 0; }
+.itemDept { font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: #125D99; }
+[dir="rtl"] .itemDept { letter-spacing: 0; font-size: 13px; }
+.itemOn .itemDept { color: #8CCAEE; }
+.itemTitle { font-size: 16.5px; font-weight: 600; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.spot {
+  min-height: 0; overflow: hidden; display: flex; align-items: center; gap: 32px;
+  background: #F4F8FC; border-radius: 28px; padding: 28px 34px; animation: spotIn 320ms ease-out;
+}
+.spotMain { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.spotDept { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #125D99; }
+.spotDept::before { content: ""; display: inline-block; width: .75em; height: .75em; border-radius: 50%; background: #E5418C; margin-inline-end: .5em; vertical-align: -.06em; }
+[dir="rtl"] .spotDept { letter-spacing: 0; font-size: 14px; }
+.spotTitle { font-size: 32px; font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; }
+[dir="rtl"] .spotTitle { letter-spacing: 0; line-height: 1.4; }
+.spotIdea { font-size: 19px; line-height: 1.5; color: #10233F; }
+[dir="rtl"] .spotIdea { line-height: 1.75; }
+.subhead { margin-top: 2px; font-size: 14px; font-weight: 700; color: #125D99; }
+.points { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.points li { position: relative; padding-inline-start: 20px; font-size: 16.5px; line-height: 1.5; color: #10233F; }
+.points li::before { content: ""; position: absolute; inset-inline-start: 2px; top: .62em; width: 8px; height: 8px; border-radius: 50%; background: #E5418C; }
+.fact { font-size: 16.5px; font-weight: 600; }
+.fact span { display: inline-block; margin-inline-end: 10px; font-size: 12.5px; font-weight: 700; color: #125D99; background: #E8F2FB; border-radius: 999px; padding: 3px 10px; vertical-align: 2px; }
+.rows { display: flex; flex-direction: column; gap: 10px; }
+.row { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 14px; font-size: 16.5px; line-height: 1.45; }
+.rowKey { font-weight: 700; color: #125D99; }
+.splitRow { display: grid; grid-template-columns: 210px minmax(0, 1fr) 48px; gap: 14px; align-items: center; font-size: 16.5px; }
+.splitName { font-weight: 600; }
+.splitTrack { height: 12px; border-radius: 99px; background: #E3EBF3; overflow: hidden; }
+.splitTrack span { display: block; height: 100%; border-radius: 99px; }
+.splitPct { font-weight: 700; text-align: end; font-variant-numeric: tabular-nums; }
+@keyframes spotIn { from { opacity: 0; transform: translateY(6px); } }
+
+/* ---------- actions ---------- */
+.actions { display: flex; align-items: center; gap: 14px; }
+.email { width: 560px; height: 76px; font-size: 21px; gap: 12px; box-shadow: 0 14px 32px rgba(20,64,116,.28); }
+.email svg { font-size: 24px; }
+.notNow { height: 76px; padding: 0 32px; font-size: 19px; }
+
+@media (prefers-reduced-motion: reduce) { .spot { animation: none; } }

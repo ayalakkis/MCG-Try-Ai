@@ -1,0 +1,22 @@
+/* design/screens/02-listening.html */
+.body { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 56px; align-items: center; }
+.left { display: flex; flex-direction: column; align-items: center; gap: 48px; }
+.status { display: flex; align-items: center; gap: 12px; font-size: 22px; font-weight: 700; }
+.dot { display: inline-block; flex: none; border-radius: 50%; background: #E5418C; width: 12px; height: 12px; animation: blink 1.2s ease-in-out infinite; }
+.timer { font-weight: 500; font-variant-numeric: tabular-nums; color: #4E5F78; font-family: var(--font-latin); }
+
+.right { display: flex; flex-direction: column; gap: 40px; }
+.caption { font-size: 40px; line-height: 1.25; font-weight: 600; letter-spacing: -0.01em; text-wrap: pretty; }
+[dir="rtl"] .caption { letter-spacing: 0; line-height: 1.5; }
+.interim { color: #8796AB; }
+.caret { display: inline-block; width: 3px; height: 40px; margin-inline-start: 4px; background: #2694CF; vertical-align: middle; animation: blink 1s steps(2) infinite; }
+
+.actions { display: flex; gap: 14px; }
+.cancel { height: 88px; padding: 0 36px; font-size: 20px; }
+.send { flex: 1; height: 88px; font-size: 24px; gap: 14px; box-shadow: 0 14px 32px rgba(20,64,116,.28); }
+
+@media (prefers-reduced-motion: reduce) {
+  .dot, .caret { animation: none; }
+}
+
+@keyframes blink { 50% { opacity: .25; } }

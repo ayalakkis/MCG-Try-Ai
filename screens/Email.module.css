@@ -1,0 +1,41 @@
+/* design/screens/06-email.html; invalid state from design/reference/orb-states-and-errors.html */
+.body { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 64px; align-items: start; padding-top: 72px; }
+
+.left { display: flex; flex-direction: column; }
+.almost { margin-top: 40px; font-size: 32px; font-weight: 600; }
+.title { margin-top: 6px; font-size: 58px; line-height: 1.06; font-weight: 700; letter-spacing: -0.02em; }
+[dir="rtl"] .title { letter-spacing: 0; line-height: 1.25; }
+
+.form { display: flex; flex-direction: column; gap: 22px; }
+.field { display: flex; flex-direction: column; gap: 10px; }
+.field label { font-size: 17px; font-weight: 600; }
+.field label em { font-style: normal; font-weight: 500; color: #4E5F78; }
+
+.inp {
+  height: 68px; border-radius: 20px; border: 1.5px solid #D9E2EC; background: #fff;
+  padding: 0 22px; font-size: 21px; font-weight: 500; width: 100%; outline: none;
+}
+.inp:focus { border: 2.5px solid #2694CF; box-shadow: 0 0 0 6px #DCEDF8; padding: 0 21px; }
+.email { height: 76px; font-size: 24px; }
+[dir="rtl"] .email { text-align: left; }
+.email.bad, .email.bad:focus { border: 2.5px solid #C2410C; box-shadow: 0 0 0 6px #FFF1E6; padding: 0 21px; }
+
+.msg { display: flex; gap: 10px; align-items: flex-start; color: #9A3412; font-size: 19px; font-weight: 600; line-height: 1.4; }
+.msg svg { font-size: 23px; margin-top: 1px; }
+
+.chips { display: flex; gap: 10px; }
+.chip { height: 48px; padding: 0 18px; font-size: 16px; }
+
+.consent { display: flex; align-items: center; gap: 14px; font-size: 19px; font-weight: 500; cursor: pointer; min-height: 48px; }
+.consent input { width: 28px; height: 28px; margin: 0; accent-color: #144074; flex: none; }
+
+.send { height: 80px; font-size: 22px; gap: 12px; box-shadow: 0 14px 32px rgba(20,64,116,.28); }
+.send:disabled { box-shadow: none; }
+.arrow { font-size: 24px; }
+[dir="rtl"] .arrow { transform: scaleX(-1); }
+.spinner { width: 24px; height: 24px; border-width: 3px; border-color: rgba(255,255,255,.35); border-top-color: #fff; }
+
+.note { text-align: center; font-size: 15px; }
+.privacy { border: 0; background: none; padding: 0; color: #125D99; text-decoration: underline; cursor: pointer; font-size: inherit; }
+/* Live timer while the email is being sent */
+.sendTimer { font-weight: 500; font-variant-numeric: tabular-nums; font-family: var(--font-latin); opacity: .7; direction: ltr; }

@@ -1,0 +1,2 @@
+.line { position: absolute; pointer-events: none; overflow: visible; }
+[dir="rtl"] .line { transform: scaleX(-1); }
