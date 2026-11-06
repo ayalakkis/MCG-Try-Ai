@@ -1,35 +1,24 @@
-/* design/screens/01-welcome.html, enriched: department chips around the orb + "how it works" */
+/* design/screens/01-welcome.html, plus a short promise and the "every strategy covers" row */
 .body { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 48px; align-items: center; }
+.visual { position: relative; height: 440px; display: flex; align-items: center; justify-content: center; }
+.line { inset-inline-start: -48px; top: -20px; width: 600px; height: 480px; }
 
-.visual { position: relative; height: 560px; display: flex; align-items: center; justify-content: center; }
-.halo { position: absolute; width: 620px; height: 620px; border-radius: 50%; background: radial-gradient(circle, rgba(38,148,207,.18) 0%, rgba(38,148,207,0) 62%); }
-.ring { position: absolute; border-radius: 50%; border: 1.5px dashed #CFE0EF; }
-.ring1 { width: 400px; height: 400px; }
-.ring2 { width: 520px; height: 520px; border-style: solid; border-color: #E6EFF7; }
-.line { inset-inline-start: -48px; top: 40px; width: 600px; height: 480px; }
-
-.chip { position: absolute; display: inline-flex; align-items: center; gap: 8px; animation-fill-mode: both; }
-.chipIcon { font-size: 18px; color: #2694CF; }
-.chip0 { inset-inline-start: 10px; top: 70px; }
-.chip1 { inset-inline-end: 0; top: 120px; }
-.chip2 { inset-inline-end: -10px; bottom: 150px; }
-.chip3 { inset-inline-start: 40px; bottom: 70px; }
-.chip4 { inset-inline-start: -10px; top: 200px; }
-
-.content { display: flex; flex-direction: column; position: relative; z-index: 2; }
+.content { display: flex; flex-direction: column; }
 .hello { font-size: 44px; font-weight: 600; }
 .headline { margin-top: 6px; font-size: 54px; line-height: 1.08; font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; }
 [dir="rtl"] .headline { letter-spacing: 0; line-height: 1.3; }
 .sub { margin: 18px 0 0; font-size: 21px; line-height: 1.5; font-weight: 500; color: #4E5F78; max-width: 560px; }
-.talk { margin-top: 32px; align-self: flex-start; width: 340px; height: 84px; font-size: 24px; gap: 14px; box-shadow: 0 14px 32px rgba(20,64,116,.28); }
+.talk { margin-top: 34px; align-self: flex-start; width: 340px; height: 84px; font-size: 24px; gap: 14px; box-shadow: 0 14px 32px rgba(20,64,116,.28); }
 .talk svg { font-size: 26px; }
 [dir="rtl"] .arrow { transform: scaleX(-1); }
 
-/* How it works: three numbered steps */
-.steps { list-style: none; margin: 40px 0 0; padding: 22px 0 0; border-top: 1px solid #E3EAF2; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-.steps li { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 12px; row-gap: 4px; align-items: center; }
-.stepIcon { grid-row: span 2; width: 48px; height: 48px; border-radius: 14px; background: #EEF5FB; color: #125D99; display: flex; align-items: center; justify-content: center; font-size: 24px; }
-.stepNum { font-size: 12px; font-weight: 700; letter-spacing: .1em; color: #2694CF; }
-.stepText { font-size: 16px; line-height: 1.3; font-weight: 600; color: #144074; }
+/* Every strategy covers: five equal tiles with the result screen's line icons */
+.covers { display: flex; flex-direction: column; gap: 14px; margin-bottom: 22px; }
+.coversLabel { font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #125D99; }
+[dir="rtl"] .coversLabel { letter-spacing: 0; font-size: 15px; }
+.depts { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+.depts li { display: flex; align-items: center; gap: 12px; padding: 10px 14px 10px 10px; border: 1px solid #E3EAF2; border-radius: 20px; background: #fff; box-shadow: 0 6px 18px rgba(20,64,116,.05); }
+.depts img { width: 64px; height: 53px; flex: none; }
+.depts span { font-size: 16px; font-weight: 600; line-height: 1.25; color: #144074; }
 
 .footer { text-align: center; font-size: 14px; font-weight: 500; color: #4E5F78; }

@@ -24,7 +24,7 @@ const en = {
     headline: "Tell us about your business. We'll build your strategy.",
     sub: "Answer five quick questions and get a marketing strategy built for your business in about a minute.",
     start: "Let's start",
-    steps: ["Answer 5 quick questions", "AI builds your strategy", "Get it in your inbox"],
+    covers: "Every strategy covers",
     tagline: "Advertising. Content. Events. AI.",
   },
   questions: {
@@ -159,7 +159,7 @@ const ar: Dict = {
     headline: "حدّثنا عن مشروعك، وسنبني لك استراتيجيتك.",
     sub: "أجب عن خمسة أسئلة سريعة واحصل على استراتيجية تسويقية مصممة لمشروعك في نحو دقيقة.",
     start: "لنبدأ",
-    steps: ["أجب عن 5 أسئلة سريعة", "الذكاء الاصطناعي يبني استراتيجيتك", "تصلك على بريدك الإلكتروني"],
+    covers: "تشمل كل استراتيجية",
     tagline: "إعلانات. محتوى. فعاليات. ذكاء اصطناعي.",
   },
   questions: {

@@ -1,11 +1,9 @@
 "use client";
 import BrandLine from "@/components/BrandLine";
 import { PrimaryButton } from "@/components/Buttons";
-import Chip from "@/components/Chip";
 import GreetingDots from "@/components/GreetingDots";
 import Header from "@/components/Header";
-import { ArrowIcon, CalendarIcon, GiftIcon, MailIcon, MegaphoneIcon, PhoneIcon, StarIcon } from "@/components/icons";
-import OptionIcon from "@/components/OptionIcon";
+import { ArrowIcon } from "@/components/icons";
 import Orb from "@/components/Orb";
 import { Canvas } from "@/components/Stage";
 import type { Dict, Lang } from "@/lib/i18n";
@@ -18,18 +16,18 @@ interface WelcomeProps {
   onStart: () => void;
 }
 
-/** The five departments the strategy covers, floating around the orb (same order as the result). */
+/** The five parts of the strategy, with the result screen's line illustrations. */
 const DEPTS = [
-  { key: "marketing", Icon: MegaphoneIcon },
-  { key: "socialMedia", Icon: PhoneIcon },
-  { key: "influencers", Icon: StarIcon },
-  { key: "event", Icon: CalendarIcon },
-  { key: "activation", Icon: GiftIcon },
+  { key: "marketing", art: "marketing" },
+  { key: "socialMedia", art: "social" },
+  { key: "influencers", art: "influencers" },
+  { key: "event", art: "event" },
+  { key: "activation", art: "activation" },
 ] as const;
 
 /**
- * design/screens/01-welcome.html, enriched at MCG's request: the departments the strategy
- * covers orbit the orb, and a three-step "how it works" row sits under "Let's start".
+ * design/screens/01-welcome.html, enriched at MCG's request: a short promise under the headline
+ * and, along the bottom, the five parts every strategy covers (same icons as the result).
  */
 export default function Welcome({ t, lang, onLang, onStart }: WelcomeProps) {
   const w = t.welcome;
@@ -39,17 +37,8 @@ export default function Welcome({ t, lang, onLang, onStart }: WelcomeProps) {
 
       <div className={s.body}>
         <div className={s.visual}>
-          <i className={s.halo} aria-hidden="true" />
-          <i className={`${s.ring} ${s.ring1}`} aria-hidden="true" />
-          <i className={`${s.ring} ${s.ring2}`} aria-hidden="true" />
           <BrandLine variant="welcome" className={s.line} />
-          <Orb state="idle" size={300} />
-          {DEPTS.map(({ key, Icon }, i) => (
-            <Chip key={key} floating className={`${s.chip} ${s[`chip${i}`]}`} style={{ animationDelay: `${i * 0.6}s` }}>
-              <Icon className={s.chipIcon} />
-              {t.preview.depts[key]}
-            </Chip>
-          ))}
+          <Orb state="idle" size={340} />
         </div>
 
         <div className={s.content}>
@@ -64,19 +53,21 @@ export default function Welcome({ t, lang, onLang, onStart }: WelcomeProps) {
             <ArrowIcon className={s.arrow} />
           </PrimaryButton>
 
-          <ol className={s.steps}>
-            {w.steps.map((label, i) => (
-              <li key={i}>
-                <span className={s.stepIcon}>
-                  {i === 0 ? <OptionIcon name="compass" /> : i === 1 ? <OptionIcon name="sparkle" /> : <MailIcon />}
-                </span>
-                <span className={s.stepNum}>{i + 1}</span>
-                <span className={s.stepText}>{label}</span>
-              </li>
-            ))}
-          </ol>
         </div>
       </div>
+
+      <section className={s.covers}>
+        <span className={s.coversLabel}>{w.covers}</span>
+        <ul className={s.depts}>
+          {DEPTS.map(({ key, art }) => (
+            <li key={key}>
+              {/* eslint-disable-next-line @next/next/no-img-element -- static SVG */}
+              <img src={`/illustrations/${art}.svg`} alt="" />
+              <span>{t.preview.depts[key]}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       <footer className={s.footer}>{w.tagline}</footer>
     </Canvas>
