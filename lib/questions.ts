@@ -1,6 +1,6 @@
 /**
- * The five tap-to-choose questions (design/screens/02-questions.html), in BRIEF_FIELDS order.
- * Each option's label is written to the brief as-is; "other" opens a short text field.
+ * The five questions (design/screens/02-questions.html), in BRIEF_FIELDS order. The visitor taps
+ * one or more options and can type something else; the labels are written to the brief as-is.
  * Arabic is Modern Standard Arabic, like the rest of the copy.
  */
 import type { BriefField, Localized } from "./services/types";
@@ -29,9 +29,6 @@ export interface Question {
 
 const o = (id: string, icon: OptionIcon, en: string, ar: string): QuestionOption => ({ id, icon, label: L(en, ar) });
 
-/** Every question ends with "Other", which lets the visitor type a short answer. */
-const other = o("other", "dots", "Other", "أخرى");
-
 export const QUESTIONS: Question[] = [
   {
     field: "business",
@@ -45,7 +42,6 @@ export const QUESTIONS: Question[] = [
       o("fitness", "dumbbell", "Fitness", "لياقة بدنية"),
       o("realestate", "home", "Real estate", "عقارات"),
       o("health", "heart", "Clinic & health", "عيادة وصحة"),
-      other,
     ],
   },
   {
@@ -59,7 +55,6 @@ export const QUESTIONS: Question[] = [
       o("women", "user", "Women 25–45", "نساء 25–45"),
       o("b2b", "building", "Business owners", "أصحاب الأعمال"),
       o("everyone", "globe", "Everyone", "الجميع"),
-      other,
     ],
   },
   {
@@ -73,7 +68,6 @@ export const QUESTIONS: Question[] = [
       o("launch", "rocket", "Launch something new", "إطلاق منتج جديد"),
       o("followers", "users", "Grow followers", "متابعون أكثر"),
       o("winback", "refresh", "Win back customers", "استعادة العملاء"),
-      other,
     ],
   },
   {
@@ -87,7 +81,6 @@ export const QUESTIONS: Question[] = [
       o("slow", "calendar", "Slow days", "أيام بطيئة"),
       o("social", "phone", "Social media isn't working", "وسائل التواصل لا تنجح"),
       o("start", "compass", "Don't know where to start", "لا أعرف من أين أبدأ"),
-      other,
     ],
   },
   {
@@ -95,12 +88,13 @@ export const QUESTIONS: Question[] = [
     title: L("Where are you?", "أين يقع مشروعك؟"),
     short: L("Area", "المنطقة"),
     options: [
-      o("capital", "pin", "Kuwait City", "مدينة الكويت"),
-      o("salmiya", "pin", "Salmiya", "السالمية"),
-      o("hawally", "pin", "Hawally", "حولي"),
-      o("jahra", "pin", "Jahra", "الجهراء"),
-      o("ahmadi", "pin", "Ahmadi", "الأحمدي"),
+      // Kuwait's six governorates; a specific area (Salmiya, Fintas…) goes in the text box.
+      o("capital", "pin", "Capital (Kuwait City)", "العاصمة"),
+      o("hawalli", "pin", "Hawalli", "حولي"),
       o("farwaniya", "pin", "Farwaniya", "الفروانية"),
+      o("mubarak", "pin", "Mubarak Al-Kabeer", "مبارك الكبير"),
+      o("ahmadi", "pin", "Ahmadi", "الأحمدي"),
+      o("jahra", "pin", "Jahra", "الجهراء"),
       o("online", "globe", "Online only", "أونلاين فقط"),
       o("all", "map", "All of Kuwait", "الكويت كلها"),
     ],

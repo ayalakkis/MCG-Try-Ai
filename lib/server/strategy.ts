@@ -64,6 +64,19 @@ interface Slot {
   sentence: boolean;
 }
 
+/**
+ * MCG wants no dashes in the copy: "5–8 PM" → "5 to 8 PM", "calm — then" → "calm, then",
+ * "after-work" → "after work". The prompt asks for this too; this catches what slips through.
+ */
+function noDashes(text: string, lang: "en" | "ar"): string {
+  return text
+    .replace(/([\d٠-٩])\s*[-–—]\s*([\d٠-٩])/g, lang === "ar" ? "$1 إلى $2" : "$1 to $2")
+    .replace(/\s*[–—]\s*/g, lang === "ar" ? "، " : ", ")
+    .replace(/(\S)-(\S)/g, "$1 $2")
+    .replace(/\s+-\s+/g, lang === "ar" ? "، " : ", ")
+    .replace(/^[\s,،]+|[\s,،]+$/g, "");
+}
+
 /** Every text slot with its limit, addressed by key so one shorten pass can rewrite the long ones. */
 function slots(s: ModelStrategy): Slot[] {
   const one = (key: string, obj: Record<string, Localized>, field: string, max: number, sentence = false): Slot => ({
@@ -145,7 +158,11 @@ ${given}`),
   const s: ModelStrategy = { ...core, ...a, ...b };
 
   // Clean cut for anything still over its slot (sentences end in "…", labels cut at a word).
-  for (const x of slots(s)) if (over(x.get(), x.max)) x.set(both(x.get(), x.max, x.sentence));
+  for (const x of slots(s)) {
+    const v = x.get();
+    x.set({ en: noDashes(v.en, "en"), ar: noDashes(v.ar, "ar") });
+    if (over(x.get(), x.max)) x.set(both(x.get(), x.max, x.sentence));
+  }
 
   return { id: randomUUID(), ...s };
 }

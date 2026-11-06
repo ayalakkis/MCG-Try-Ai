@@ -58,8 +58,8 @@ export const initialState: SessionState = {
 export type Action =
   | { type: "SET_LANG"; lang: Lang }
   | { type: "START"; id: string }
-  /** A tapped (or typed "Other") answer to the current question. */
-  | { type: "ANSWER"; field: BriefField; value: Localized; optionId: string }
+  /** The options tapped (and anything typed) for the current question. */
+  | { type: "ANSWER"; field: BriefField; value: Localized; optionIds: string[] }
   | { type: "BACK" }
   /** Last step: the optional business name, then CREATE. */
   | { type: "QUESTIONS_DONE"; brandName: string }
@@ -89,7 +89,7 @@ export function reducer(state: SessionState, action: Action): SessionState {
     case "ANSWER": {
       if (state.screen !== "questions" || QUESTIONS[state.step]?.field !== action.field) return state;
       const brief: Brief = { ...state.brief, [action.field]: action.value };
-      if (action.field === "business") brief.industry = action.optionId;
+      if (action.field === "business") brief.industry = action.optionIds[0] ?? "other";
       return { ...state, brief, step: state.step + 1 };
     }
     case "BACK":

@@ -80,7 +80,6 @@ export default function StrategyEmailBase({ lang, strategy, brief, name = "", ap
       {children}
     </p>
   );
-  const title = (text: string) => <h2 style={{ margin: "0 0 8px", fontSize: 22, fontWeight: 700, letterSpacing: T.tight, lineHeight: rtl ? 1.4 : 1.25, color: C.ink }}>{text}</h2>;
   const para = (text: string) => <p style={{ margin: "0 0 12px", fontSize: T.body, lineHeight: T.bodyLine, color: C.ink }}>{text}</p>;
   const bullets = (items: Localized[]) => (
     <table role="presentation" width="100%" cellPadding={0} cellSpacing={0}>
@@ -113,23 +112,23 @@ export default function StrategyEmailBase({ lang, strategy, brief, name = "", ap
     [p.params.objective, L(strategy.objective)],
     [p.params.focus, L(strategy.funnelStage)],
   ];
-  /** One department: its line icon beside the label, title and idea, then the details full width. */
+  /** One department: its line icon beside the label and title, then the idea and details full width (fits a phone). */
   const dept = (art: string, labelText: string, titleText: string, idea: string, details: ReactNode) => (
-    <Section style={sec}>
-      <table role="presentation" width="100%" cellPadding={0} cellSpacing={0} style={{ borderCollapse: "collapse" }}>
+    <Section className="sec" style={sec}>
+      <table role="presentation" width="100%" cellPadding={0} cellSpacing={0} style={{ borderCollapse: "collapse", marginBottom: 12 }}>
         <tbody>
           <tr>
-            <td width="104" style={{ width: 104, verticalAlign: "top", paddingTop: 2 }}>
-              <Img src={src(`email/art/${art}.png`)} width="88" height="73" alt="" style={{ display: "block", border: 0, borderRadius: 14 }} />
+            <td width="76" style={{ width: 76, verticalAlign: "middle" }}>
+              <Img src={src(`email/art/${art}.png`)} width="64" height="53" alt="" style={{ display: "block", border: 0 }} />
             </td>
-            <td style={{ verticalAlign: "top", textAlign: start }}>
+            <td style={{ verticalAlign: "middle", textAlign: start }}>
               {label(labelText)}
-              {title(titleText)}
-              {para(idea)}
+              <h2 style={{ margin: 0, fontSize: 21, fontWeight: 700, letterSpacing: T.tight, lineHeight: rtl ? 1.4 : 1.25, color: C.ink }}>{titleText}</h2>
             </td>
           </tr>
         </tbody>
       </table>
+      {para(idea)}
       {details}
     </Section>
   );
@@ -139,11 +138,22 @@ export default function StrategyEmailBase({ lang, strategy, brief, name = "", ap
       <Head>
         <meta name="color-scheme" content="light" />
         <meta name="supported-color-schemes" content="light" />
-        <style>{`@import url('https://fonts.googleapis.com/css2?family=${rtl ? "IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=" : ""}Montserrat:wght@400;500;600;700&display=swap');`}</style>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>{`@import url('https://fonts.googleapis.com/css2?family=${rtl ? "IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=" : ""}Montserrat:wght@400;500;600;700&display=swap');
+@media only screen and (max-width: 620px) {
+  .outer { padding: 12px 0 !important; }
+  .card { border-radius: 20px !important; }
+  .sec { padding: 24px 20px !important; }
+  .greet { padding: 28px 20px 20px !important; }
+  .bannerWrap { padding: 0 12px !important; }
+  .bannerPad { padding-left: 22px !important; padding-right: 22px !important; }
+  .hl { font-size: 24px !important; }
+  .cta { padding: 32px 20px !important; }
+}`}</style>
       </Head>
       <Preview>{L(strategy.headline)}</Preview>
       <Body dir={dir} style={{ margin: 0, padding: 0, backgroundColor: "#E9F1F9", backgroundImage: "linear-gradient(180deg,#E4EEF8 0%,#F0F6FB 50%,#E4EEF8 100%)", fontFamily: T.font, color: C.ink }}>
-        <Container style={{ width: "100%", maxWidth: 680, padding: "40px 0" }}>
+        <Container className="outer" style={{ width: "100%", maxWidth: 680, padding: "40px 0" }}>
           {/* Logo bar */}
           <Section style={{ padding: "0 8px 20px" }}>
             <Row>
@@ -154,29 +164,41 @@ export default function StrategyEmailBase({ lang, strategy, brief, name = "", ap
             </Row>
           </Section>
 
-          <Section style={{ backgroundColor: "#ffffff", borderRadius: 28, boxShadow: "0 20px 60px rgba(10,30,70,.12)", overflow: "hidden" }}>
+          <Section className="card" style={{ backgroundColor: "#ffffff", borderRadius: 28, boxShadow: "0 20px 60px rgba(10,30,70,.12)", overflow: "hidden" }}>
             {/* Greeting */}
-            <Section style={{ padding: "40px 44px 26px" }}>
+            <Section className="greet" style={{ padding: "40px 44px 26px" }}>
               <p style={{ margin: "0 0 6px", fontSize: T.hello, fontWeight: 600, color: C.cyan, lineHeight: 1.3 }}>{m.hello(name)}</p>
               <p style={{ margin: 0, fontSize: T.small, color: C.muted, lineHeight: T.line }}>{m.intro}</p>
             </Section>
 
-            {/* Banner: the strategy line and its facts on navy, the Kuwait skyline beside it */}
-            <Section style={{ padding: "0 24px" }}>
+            {/* Banner (one column, so it reads the same on a phone): the strategy line, its facts as a
+                2×2 summary, and the Kuwait skyline at the bottom corner. */}
+            <Section className="bannerWrap" style={{ padding: "0 24px" }}>
               <table role="presentation" width="100%" cellPadding={0} cellSpacing={0} bgcolor={C.ink} style={{ borderCollapse: "separate", backgroundColor: C.ink, borderRadius: 24 }}>
                 <tbody>
                   <tr>
-                    <td style={{ verticalAlign: "bottom", padding: rtl ? "30px 28px 28px 0" : "30px 0 28px 28px", textAlign: start }}>
-                      <p style={{ margin: "0 0 8px", fontSize: T.small, fontWeight: 600, color: "#8CCAEE" }}>{m.headline(brief.brandName ?? "")}</p>
-                      <h1 style={{ margin: "0 0 16px", fontSize: 28, lineHeight: T.h1Line, fontWeight: 700, letterSpacing: T.tight, color: "#ffffff" }}>{L(strategy.headline)}</h1>
-                      {params.map(([k, v]) => (
-                        <span key={k} style={{ display: "inline-block", margin: rtl ? "0 0 6px 6px" : "0 6px 6px 0", padding: "5px 12px", borderRadius: 999, border: "1px solid rgba(255,255,255,.28)", backgroundColor: "#1E4F86", fontSize: 12.5, fontWeight: 600, color: "#ffffff", lineHeight: 1.4 }}>
-                          <span style={{ color: "#B9D3EA", fontWeight: 500 }}>{k}</span> {v}
-                        </span>
-                      ))}
+                    <td className="bannerPad" style={{ padding: "30px 32px 0", textAlign: start }}>
+                      <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, letterSpacing: rtl ? 0 : ".1em", textTransform: "uppercase", color: "#8CCAEE" }}>{m.headline(brief.brandName ?? "")}</p>
+                      <h1 className="hl" style={{ margin: "0 0 20px", fontSize: 30, lineHeight: T.h1Line, fontWeight: 700, letterSpacing: T.tight, color: "#ffffff" }}>{L(strategy.headline)}</h1>
+                      <table role="presentation" width="100%" cellPadding={0} cellSpacing={0} style={{ borderCollapse: "collapse", borderTop: "1px solid #2E5E93" }}>
+                        <tbody>
+                          {[params.slice(0, 2), params.slice(2, 4)].map((pair, r) => (
+                            <tr key={r}>
+                              {pair.map(([k, v], c) => (
+                                <td key={k} width="50%" style={{ width: "50%", verticalAlign: "top", padding: c === 0 ? (rtl ? "14px 0 0 12px" : "14px 12px 0 0") : rtl ? "14px 12px 0 0" : "14px 0 0 12px", textAlign: start }}>
+                                  <p style={{ margin: "0 0 3px", fontSize: 11, fontWeight: 700, letterSpacing: rtl ? 0 : ".1em", textTransform: "uppercase", color: "#8CCAEE" }}>{k}</p>
+                                  <p style={{ margin: 0, fontSize: 14.5, fontWeight: 600, lineHeight: 1.4, color: "#ffffff" }}>{v}</p>
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </td>
-                    <td width="196" style={{ width: 196, verticalAlign: "bottom", padding: rtl ? "0 16px 18px 0" : "0 0 18px 16px" }}>
-                      <Img src={src("email/art/skyline.png")} width="164" height="158" alt="" style={{ display: "block", border: 0, ...(rtl ? { transform: "scaleX(-1)" } : {}) }} />
+                  </tr>
+                  <tr>
+                    <td align={rtl ? "left" : "right"} style={{ padding: rtl ? "6px 20px 0 0" : "6px 0 0 20px", textAlign: rtl ? "left" : "right", lineHeight: 0, fontSize: 0 }}>
+                      <Img src={src("email/art/skyline.png")} width="130" height="126" alt="" style={{ display: "inline-block", border: 0, borderBottomRightRadius: rtl ? 0 : 24, borderBottomLeftRadius: rtl ? 24 : 0, ...(rtl ? { transform: "scaleX(-1)" } : {}) }} />
                     </td>
                   </tr>
                 </tbody>
@@ -241,7 +263,7 @@ export default function StrategyEmailBase({ lang, strategy, brief, name = "", ap
 
             {/* CTA */}
             <Section style={{ padding: "8px 24px 24px" }}>
-              <Section style={{ backgroundColor: C.ink, borderRadius: 24, padding: "44px 34px", textAlign: "center", color: "#ffffff" }}>
+              <Section className="cta" style={{ backgroundColor: C.ink, borderRadius: 24, padding: "44px 34px", textAlign: "center", color: "#ffffff" }}>
                 <p style={{ margin: "0 0 18px", lineHeight: "12px", fontSize: 0 }}>
                   {[C.orange, C.pink, C.dot].map((c) => (
                     <span key={c} style={{ display: "inline-block", width: 12, height: 12, borderRadius: "50%", backgroundColor: c, margin: "0 3px" }} />

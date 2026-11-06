@@ -9,12 +9,9 @@ import Orb from "@/components/Orb";
 import SectionLabel from "@/components/SectionLabel";
 import { Canvas } from "@/components/Stage";
 import type { Dict, Lang } from "@/lib/i18n";
-import { QUESTIONS, type QuestionOption } from "@/lib/questions";
+import { QUESTIONS } from "@/lib/questions";
 import type { Brief, BriefField, Localized } from "@/lib/services/types";
 import s from "./Questions.module.css";
-
-/** How long the tapped card shows as selected before the next question slides in. */
-const ADVANCE_MS = 350;
 
 interface QuestionsProps {
   t: Dict;
@@ -24,52 +21,38 @@ interface QuestionsProps {
   brief: Brief;
   /** Index into QUESTIONS; QUESTIONS.length = the optional business-name step. */
   step: number;
-  onAnswer: (field: BriefField, value: Localized, optionId: string) => void;
+  onAnswer: (field: BriefField, value: Localized, optionIds: string[]) => void;
   onBack: () => void;
   onDone: (brandName: string) => void;
 }
 
 /**
- * design/screens/02-questions.html: one question at a time, answered by tapping a card
- * (tap → selected for a moment → next question). "Other" opens a short text field.
- * After the five questions comes the optional business name, then CREATE.
+ * design/screens/02-questions.html: one question at a time. The visitor taps one or more cards
+ * and can also type something else, then Next. After the five questions comes the optional
+ * business name, then CREATE. The parent remounts this screen per step, so each starts clean.
  */
 export default function Questions({ t, lang, onLang, onStartOver, brief, step, onAnswer, onBack, onDone }: QuestionsProps) {
   const q = t.questions;
   const question = QUESTIONS[step];
-  const [picked, setPicked] = useState<string | null>(null);
-  const [typing, setTyping] = useState(false);
+  const [picked, setPicked] = useState<string[]>([]);
   const [text, setText] = useState("");
   const [brand, setBrand] = useState(brief.brandName ?? "");
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const input = useRef<HTMLInputElement>(null);
-
-  // The parent remounts this screen per step (key), so each question starts clean.
-  useEffect(
-    () => () => {
-      if (timer.current) clearTimeout(timer.current);
-    },
-    [],
-  );
+  const brandInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (typing || !question) input.current?.focus();
-  }, [typing, question]);
+    if (!question) brandInput.current?.focus();
+  }, [question]);
 
-  const pick = (opt: QuestionOption) => {
-    if (picked || !question) return;
-    if (opt.id === "other") {
-      setTyping(true);
-      return;
-    }
-    setPicked(opt.id);
-    timer.current = setTimeout(() => onAnswer(question.field, opt.label, opt.id), ADVANCE_MS);
-  };
+  const toggle = (id: string) => setPicked((p) => (p.includes(id) ? p.filter((x) => x !== id) : [...p, id]));
+  const extra = text.trim();
+  const ready = picked.length > 0 || extra.length > 0;
 
-  const submitOther = () => {
-    const v = text.trim();
-    if (!v || !question) return;
-    onAnswer(question.field, { en: v, ar: v }, "other");
+  const next = () => {
+    if (!question || !ready) return;
+    // Options in the order shown, then whatever was typed.
+    const chosen = question.options.filter((o) => picked.includes(o.id));
+    const join = (l: Lang, sep: string) => [...chosen.map((o) => o.label[l]), ...(extra ? [extra] : [])].join(sep);
+    onAnswer(question.field, { en: join("en", ", "), ar: join("ar", "، ") }, chosen.map((o) => o.id));
   };
 
   const rows: BriefRow[] = QUESTIONS.map((x, i) => ({
@@ -78,7 +61,6 @@ export default function Questions({ t, lang, onLang, onStartOver, brief, step, o
     value: brief[x.field]?.[lang],
     status: i < step ? "done" : i === step ? "current" : "pending",
   }));
-  const current = brief[question?.field ?? "business"];
 
   return (
     <Canvas>
@@ -92,32 +74,28 @@ export default function Questions({ t, lang, onLang, onStartOver, brief, step, o
           </div>
           <h1 className={s.title}>{question ? question.title[lang] : q.brandTitle}</h1>
 
-          {question && !typing && (
-            <div className={s.grid}>
-              {question.options.map((opt) => {
-                const on = picked === opt.id || (!picked && current?.en === opt.label.en);
-                return (
-                  <button key={opt.id} type="button" className={on ? `${s.opt} ${s.on}` : s.opt} aria-pressed={on} onClick={() => pick(opt)}>
-                    <span className={s.oi}>
-                      <OptionIcon name={opt.icon} />
-                    </span>
-                    {opt.label[lang]}
-                  </button>
-                );
-              })}
-            </div>
-          )}
-
-          {question && typing && (
+          {question ? (
             <form
               className={s.form}
               onSubmit={(e) => {
                 e.preventDefault();
-                submitOther();
+                next();
               }}
             >
+              <div className={s.grid}>
+                {question.options.map((opt) => {
+                  const on = picked.includes(opt.id);
+                  return (
+                    <button key={opt.id} type="button" className={on ? `${s.opt} ${s.on}` : s.opt} aria-pressed={on} onClick={() => toggle(opt.id)}>
+                      <span className={s.oi}>
+                        <OptionIcon name={opt.icon} />
+                      </span>
+                      {opt.label[lang]}
+                    </button>
+                  );
+                })}
+              </div>
               <input
-                ref={input}
                 className={s.inp}
                 dir="auto"
                 maxLength={60}
@@ -127,18 +105,13 @@ export default function Questions({ t, lang, onLang, onStartOver, brief, step, o
                 onChange={(e) => setText(e.target.value)}
               />
               <div className={s.formActions}>
-                <PrimaryButton type="submit" className={s.cta} disabled={!text.trim()}>
+                <PrimaryButton type="submit" className={s.cta} disabled={!ready}>
                   {q.next}
                   <ArrowIcon className={s.flip} />
                 </PrimaryButton>
-                <SecondaryButton className={s.cta} onClick={() => setTyping(false)}>
-                  {q.showOptions}
-                </SecondaryButton>
               </div>
             </form>
-          )}
-
-          {!question && (
+          ) : (
             <form
               className={s.form}
               onSubmit={(e) => {
@@ -147,7 +120,7 @@ export default function Questions({ t, lang, onLang, onStartOver, brief, step, o
               }}
             >
               <input
-                ref={input}
+                ref={brandInput}
                 className={s.inp}
                 dir="auto"
                 maxLength={32}

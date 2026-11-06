@@ -6,7 +6,6 @@ import Header from "@/components/Header";
 import { CheckIcon } from "@/components/icons";
 import Orb from "@/components/Orb";
 import { Canvas } from "@/components/Stage";
-import Timer from "@/components/Timer";
 import type { Dict, Lang } from "@/lib/i18n";
 import type { Brief, Localized } from "@/lib/services/types";
 import type { CreateProgress } from "@/lib/useCreateSequence";
@@ -84,7 +83,10 @@ export default function Create({ t, lang, onLang, onStartOver, brief, progress }
           >
             <span className={s.fill} style={{ width: `${pct}%` }} />
           </span>
-          <Timer ms={progress.elapsed} label={t.common.elapsed} className={s.timer} />
+          <div className={s.status}>
+            <span>{t.create.takes}</span>
+            <b>{Math.floor(pct)}%</b>
+          </div>
         </div>
       </div>
     </Canvas>

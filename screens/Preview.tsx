@@ -58,16 +58,18 @@ export default function Preview({ t, lang, onLang, onStartOver, strategy, brief,
         <section className={s.hero}>
           {/* eslint-disable-next-line @next/next/no-img-element -- static SVG, no optimisation needed */}
           <img className={s.heroArt} src="/illustrations/hero.svg" alt="" />
-          <span className={s.yourStrategy}>{p.yourStrategy}…</span>
-          <h1 className={s.headline}>{L(strategy.headline)}</h1>
-          <div className={s.facts}>
-            {facts.map((f) => (
-              <span key={f.label}>
-                <em>{f.label}</em>
-                {f.value}
-              </span>
-            ))}
+          <div className={s.heroTop}>
+            <span className={s.yourStrategy}>{p.yourStrategy}</span>
+            <h1 className={s.headline}>{L(strategy.headline)}</h1>
           </div>
+          <dl className={s.facts}>
+            {facts.map((f) => (
+              <div key={f.label}>
+                <dt>{f.label}</dt>
+                <dd>{f.value}</dd>
+              </div>
+            ))}
+          </dl>
         </section>
 
         <section className={s.cards}>

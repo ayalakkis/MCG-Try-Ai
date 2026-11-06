@@ -33,7 +33,8 @@
 
 .bar { display: block; margin-top: 32px; height: 10px; border-radius: 99px; background: #E3EDF6; overflow: hidden; }
 .fill { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, #2694CF, #125D99 60%, #144074); transition: width 200ms linear; }
-.timer { align-self: flex-end; margin-top: 14px; }
+.status { display: flex; justify-content: space-between; align-items: baseline; margin-top: 14px; font-size: 16px; font-weight: 500; color: #4E5F78; }
+.status b { font-size: 18px; font-weight: 700; color: #144074; font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; }
 [dir="rtl"] .fill { background: linear-gradient(270deg, #2694CF, #125D99 60%, #144074); }
 
 @keyframes shim { from { background-position: 100% 0; } to { background-position: -150% 0; } }

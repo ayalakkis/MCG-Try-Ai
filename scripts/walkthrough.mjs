@@ -90,7 +90,7 @@ for (const lang of langs) {
   await button(t.startOver).first().click();
   await tick(500);
   if (lang === "ar") await button("عربي").click();
-  for (const a of [{ type: "START", id: "walkthrough" }, ...[["business", "Café & coffee", "مقهى وقهوة", "cafe"], ["audience", "Young professionals", "موظفون شباب", "professionals"], ["goal", "More visits", "زيارات أكثر", "visits"], ["challenge", "Slow days", "أيام بطيئة", "slow"], ["location", "Salmiya", "السالمية", "salmiya"]].map(([field, en, ar, optionId]) => ({ type: "ANSWER", field, value: { en, ar }, optionId })), { type: "QUESTIONS_DONE", brandName: "Bloom Coffee" }]) await dispatch(a); // Answers the 5 questions + business name
+  for (const a of [{ type: "START", id: "walkthrough" }, ...[["business", "Café & coffee", "مقهى وقهوة", "cafe"], ["audience", "Young professionals", "موظفون شباب", "professionals"], ["goal", "More visits", "زيارات أكثر", "visits"], ["challenge", "Slow days", "أيام بطيئة", "slow"], ["location", "Hawalli, Salmiya", "حولي، السالمية", "hawalli"]].map(([field, en, ar, optionId]) => ({ type: "ANSWER", field, value: { en, ar }, optionIds: [optionId] })), { type: "QUESTIONS_DONE", brandName: "Bloom Coffee" }]) await dispatch(a); // Answers the 5 questions + business name
   await tick(12_000);
   await shot("create");
   await tick(26_000);

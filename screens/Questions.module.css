@@ -1,33 +1,32 @@
 /* design/screens/02-questions.html */
 .body { flex: 1; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 56px; align-items: center; }
 
-.main { display: flex; flex-direction: column; gap: 28px; animation: qin .35s ease-out both; }
+.main { display: flex; flex-direction: column; gap: 22px; animation: qin .35s ease-out both; }
 @keyframes qin { from { opacity: 0; transform: translateY(12px); } }
 .intro { display: flex; align-items: center; gap: 18px; }
 .title { font-size: 52px; line-height: 1.12; font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; }
 
-.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .opt {
-  display: flex; align-items: center; gap: 16px; height: 88px; padding: 0 20px; background: #fff;
+  display: flex; align-items: center; gap: 16px; height: 76px; padding: 0 18px; background: #fff;
   border: 1.5px solid #D9E2EC; border-radius: 24px; font-size: 19px; font-weight: 600; color: #144074;
   cursor: pointer; text-align: start; line-height: 1.25;
   transition: border-color .2s, box-shadow .2s, transform .2s;
 }
 .opt:active { transform: scale(.98); }
-/* A lone last card ("Other") spans the row. */
-.opt:last-child:nth-child(odd) { grid-column: span 2; }
 .oi { width: 52px; height: 52px; border-radius: 16px; background: #EEF5FB; color: #125D99; display: flex; align-items: center; justify-content: center; font-size: 26px; flex: none; transition: background .2s, color .2s; }
-.on { border: 2.5px solid #2694CF; box-shadow: 0 0 0 6px rgba(38,148,207,.14); padding: 0 19px; }
+.on { border: 2.5px solid #2694CF; box-shadow: 0 0 0 6px rgba(38,148,207,.14); padding: 0 17px; }
 .on .oi { background: #144074; color: #fff; }
 
-.form { display: flex; flex-direction: column; gap: 18px; }
+.form { display: flex; flex-direction: column; gap: 14px; }
 .inp {
-  height: 76px; border-radius: 20px; border: 1.5px solid #D9E2EC; background: #fff;
-  padding: 0 22px; font-size: 24px; font-weight: 500; width: 100%; outline: none;
+  height: 64px; border-radius: 20px; border: 1.5px solid #D9E2EC; background: #fff;
+  padding: 0 22px; font-size: 20px; font-weight: 500; width: 100%; outline: none;
 }
 .inp:focus { border: 2.5px solid #2694CF; box-shadow: 0 0 0 6px #DCEDF8; padding: 0 21px; }
 .formActions { display: flex; gap: 14px; }
-.cta { height: 72px; padding: 0 32px; font-size: 20px; gap: 12px; }
+.cta { height: 64px; padding: 0 32px; font-size: 20px; gap: 12px; }
+.cta:disabled { opacity: .45; cursor: default; }
 .cta svg { font-size: 22px; }
 [dir="rtl"] .flip { transform: scaleX(-1); }
 

@@ -1,20 +1,29 @@
 /* RESULT: design/screens/05-result.html (image-led strategy, no finance). */
 .body { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 22px; padding-top: 6px; }
 
-/* ---------- hero ---------- */
-.hero { position: relative; flex: none; height: 270px; border-radius: 32px; overflow: hidden; color: #fff; display: flex; flex-direction: column; justify-content: flex-end; padding: 30px 36px; background: radial-gradient(circle at 85% 20%, #2694CF 0%, rgba(38,148,207,0) 45%), linear-gradient(115deg, #0B1E3A 0%, #144074 55%, #125D99 100%); }
-.heroArt { position: absolute; inset-inline-end: 0; bottom: 0; height: 100%; width: auto; }
+/* ---------- hero: the strategy line on top, its facts as a summary bar below ---------- */
+.hero {
+  position: relative; flex: none; height: 270px; border-radius: 32px; overflow: hidden; color: #fff;
+  display: flex; flex-direction: column; justify-content: space-between; padding: 30px 36px 26px;
+  background: radial-gradient(circle at 85% 20%, #2694CF 0%, rgba(38,148,207,0) 45%), linear-gradient(115deg, #0B1E3A 0%, #144074 55%, #125D99 100%);
+}
+.heroArt { position: absolute; inset-inline-end: 0; bottom: 0; height: 100%; width: auto; opacity: .7; }
 [dir="rtl"] .heroArt { transform: scaleX(-1); }
 .hero > :not(.heroArt) { position: relative; z-index: 1; }
-.yourStrategy { font-size: 18px; font-weight: 600; color: #8CCAEE; }
+.heroTop { display: flex; flex-direction: column; gap: 8px; max-width: 760px; }
+.yourStrategy { font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #8CCAEE; }
+[dir="rtl"] .yourStrategy { letter-spacing: 0; font-size: 15px; }
 .headline {
-  margin-top: 6px; font-size: 46px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; max-width: 720px;
+  margin: 0; font-size: 40px; line-height: 1.18; font-weight: 700; letter-spacing: -0.02em; padding-bottom: 2px;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
-[dir="rtl"] .headline { letter-spacing: 0; line-height: 1.35; }
-.facts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; max-width: 760px; }
-.facts span { background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.25); border-radius: 999px; padding: 7px 14px; font-size: 14.5px; font-weight: 600; max-width: 420px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.facts em { font-style: normal; opacity: .7; font-weight: 500; margin-inline-end: 6px; }
+[dir="rtl"] .headline { letter-spacing: 0; line-height: 1.4; }
+.facts { margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: 920px; border-top: 1px solid rgba(255,255,255,.18); padding-top: 14px; }
+.facts > div { min-width: 0; padding-inline-end: 20px; }
+.facts > div + div { padding-inline-start: 20px; border-inline-start: 1px solid rgba(255,255,255,.18); }
+.facts dt { font-size: 11.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8CCAEE; }
+[dir="rtl"] .facts dt { letter-spacing: 0; font-size: 13px; }
+.facts dd { margin: 4px 0 0; font-size: 15px; line-height: 1.35; font-weight: 600; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
 /* ---------- department cards ---------- */
 .cards { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }

@@ -111,7 +111,7 @@ export default function Page() {
           {...common}
           brief={state.brief}
           step={state.step}
-          onAnswer={(field, value, optionId) => dispatch({ type: "ANSWER", field, value, optionId })}
+          onAnswer={(field, value, optionIds) => dispatch({ type: "ANSWER", field, value, optionIds })}
           onBack={() => dispatch({ type: "BACK" })}
           onDone={(brandName) => dispatch({ type: "QUESTIONS_DONE", brandName })}
         />

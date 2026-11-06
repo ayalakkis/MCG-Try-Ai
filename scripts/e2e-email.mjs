@@ -31,7 +31,7 @@ await p.clock.install();
 await p.goto("http://localhost:3000", { waitUntil: "networkidle" });
 await p.evaluate(() => document.fonts.ready);
 if (lang === "ar") await p.getByRole("button", { name: "عربي" }).click();
-for (const a of [{ type: "START", id: "walkthrough" }, ...[["business", "Café & coffee", "مقهى وقهوة", "cafe"], ["audience", "Young professionals", "موظفون شباب", "professionals"], ["goal", "More visits", "زيارات أكثر", "visits"], ["challenge", "Slow days", "أيام بطيئة", "slow"], ["location", "Salmiya", "السالمية", "salmiya"]].map(([field, en, ar, optionId]) => ({ type: "ANSWER", field, value: { en, ar }, optionId })), { type: "QUESTIONS_DONE", brandName: "Bloom Coffee" }]) await p.evaluate((a) => window.__mcg.dispatch(a), a); // Answers the 5 questions + business name
+for (const a of [{ type: "START", id: "walkthrough" }, ...[["business", "Café & coffee", "مقهى وقهوة", "cafe"], ["audience", "Young professionals", "موظفون شباب", "professionals"], ["goal", "More visits", "زيارات أكثر", "visits"], ["challenge", "Slow days", "أيام بطيئة", "slow"], ["location", "Hawalli, Salmiya", "حولي، السالمية", "hawalli"]].map(([field, en, ar, optionId]) => ({ type: "ANSWER", field, value: { en, ar }, optionIds: [optionId] })), { type: "QUESTIONS_DONE", brandName: "Bloom Coffee" }]) await p.evaluate((a) => window.__mcg.dispatch(a), a); // Answers the 5 questions + business name
 await p.clock.runFor(37_000);
 await p.clock.runFor(5_000);
 await p.getByRole("button", { name: T.email }).click();

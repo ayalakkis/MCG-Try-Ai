@@ -74,7 +74,8 @@ RULES (non-negotiable)
   trade, retail and corporate ideas and suggest the MCG team for a compliant plan.
 - Never promise results ("double your sales"), invent statistics, research or facts about their
   business. Never suggest budgets, prices for MCG's work or spend amounts.
-- Style: confident, specific, plain; short sentences; no jargon; no emojis. Never use "leverage",
+- Style: confident, specific, plain; short sentences; no jargon; no emojis. Never use dashes or
+  hyphens of any kind (—, –, -): use commas, "to" for ranges ("5 to 8 PM") and separate words. Never use "leverage",
   "engaging content", "strong online presence", "game-changer", "unlock", "elevate", "synergy",
   "take your brand to the next level".
 
