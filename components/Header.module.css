@@ -12,3 +12,8 @@
 .seg .on { background: #144074; color: #fff; }
 .en { font-family: var(--font-latin); }
 .ar { font-family: var(--font-ar); font-size: 17px !important; }
+
+/* Dark variant (navy Welcome) */
+.dark .seg { background: rgba(255,255,255,.12); }
+.dark .seg button { color: #DCEBF7; }
+.dark .seg .on { background: #fff; color: #144074; }

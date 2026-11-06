@@ -1,24 +1,16 @@
-/* design/screens/01-welcome.html, plus a short promise and the "every strategy covers" row */
-.body { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 48px; align-items: center; }
-.visual { position: relative; height: 440px; display: flex; align-items: center; justify-content: center; }
-.line { inset-inline-start: -48px; top: -20px; width: 600px; height: 480px; }
+/* WELCOME: centred and minimal */
+.sweep { position: absolute; left: 48px; right: 48px; bottom: 120px; width: calc(100% - 96px); height: 300px; pointer-events: none; }
+[dir="rtl"] .sweep { transform: scaleX(-1); }
 
-.content { display: flex; flex-direction: column; }
-.hello { font-size: 44px; font-weight: 600; }
-.headline { margin-top: 6px; font-size: 54px; line-height: 1.08; font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; }
+.body { position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding-bottom: 40px; }
+.orbWrap { position: relative; display: flex; align-items: center; justify-content: center; margin-bottom: 26px; }
+.glow { position: absolute; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(38,148,207,.22) 0%, rgba(38,148,207,0) 60%); }
+.hello { font-size: 34px; font-weight: 600; }
+.headline { margin: 8px 0 0; max-width: 980px; font-size: 64px; line-height: 1.06; font-weight: 700; letter-spacing: -0.025em; text-wrap: balance; }
 [dir="rtl"] .headline { letter-spacing: 0; line-height: 1.3; }
-.sub { margin: 18px 0 0; font-size: 21px; line-height: 1.5; font-weight: 500; color: #4E5F78; max-width: 560px; }
-.talk { margin-top: 34px; align-self: flex-start; width: 340px; height: 84px; font-size: 24px; gap: 14px; box-shadow: 0 14px 32px rgba(20,64,116,.28); }
+.sub { margin: 20px 0 0; max-width: 640px; font-size: 21px; line-height: 1.55; font-weight: 500; color: #4E5F78; }
+.talk { margin-top: 36px; width: 340px; height: 84px; font-size: 24px; gap: 14px; box-shadow: 0 16px 36px rgba(20,64,116,.3); }
 .talk svg { font-size: 26px; }
 [dir="rtl"] .arrow { transform: scaleX(-1); }
 
-/* Every strategy covers: five equal tiles with the result screen's line icons */
-.covers { display: flex; flex-direction: column; gap: 14px; margin-bottom: 22px; }
-.coversLabel { font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #125D99; }
-[dir="rtl"] .coversLabel { letter-spacing: 0; font-size: 15px; }
-.depts { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
-.depts li { display: flex; align-items: center; gap: 12px; padding: 10px 14px 10px 10px; border: 1px solid #E3EAF2; border-radius: 20px; background: #fff; box-shadow: 0 6px 18px rgba(20,64,116,.05); }
-.depts img { width: 64px; height: 53px; flex: none; }
-.depts span { font-size: 16px; font-weight: 600; line-height: 1.25; color: #144074; }
-
-.footer { text-align: center; font-size: 14px; font-weight: 500; color: #4E5F78; }
+.footer { position: relative; z-index: 1; text-align: center; font-size: 14px; font-weight: 500; color: #4E5F78; }

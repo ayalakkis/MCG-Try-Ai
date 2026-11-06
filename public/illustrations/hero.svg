@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 270">
-  <g fill="none" stroke="#8CCAEE" stroke-width="1.6" stroke-linecap="round" opacity=".55">
-    <path d="M250 236h270"/>
-    <path d="M262 236v-70h22v70M290 236v-96h20v96M316 236v-58l10-12 10 12v58M342 236v-40h18v40"/>
-    <path d="M478 236v-84h20v84M502 236v-56h14v56"/>
+  <g fill="none" stroke="#8CCAEE" stroke-width="1.6" stroke-linecap="round" opacity=".55" vector-effect="non-scaling-stroke">
+    <path vector-effect="non-scaling-stroke" d="M250 236h270"/>
+    <path vector-effect="non-scaling-stroke" d="M262 236v-70h22v70M290 236v-96h20v96M316 236v-58l10-12 10 12v58M342 236v-40h18v40"/>
+    <path vector-effect="non-scaling-stroke" d="M478 236v-84h20v84M502 236v-56h14v56"/>
   </g>
   <g fill="none" stroke="#DCEBF7" stroke-width="2" stroke-linecap="round">
-    <path d="M410 236V14"/><circle cx="410" cy="128" r="32"/><path d="M378 128h64"/><circle cx="410" cy="72" r="14"/>
-    <path d="M452 236V84"/><circle cx="452" cy="168" r="21"/>
-    <path d="M374 236V96"/>
+    <path vector-effect="non-scaling-stroke" d="M410 236V14"/><circle vector-effect="non-scaling-stroke" cx="410" cy="128" r="32"/><path vector-effect="non-scaling-stroke" d="M378 128h64"/><circle vector-effect="non-scaling-stroke" cx="410" cy="72" r="14"/>
+    <path vector-effect="non-scaling-stroke" d="M452 236V84"/><circle vector-effect="non-scaling-stroke" cx="452" cy="168" r="21"/>
+    <path vector-effect="non-scaling-stroke" d="M374 236V96"/>
   </g>
-  <g fill="#2694CF" opacity=".35"><circle cx="410" cy="128" r="31"/><circle cx="410" cy="72" r="13"/><circle cx="452" cy="168" r="20"/></g>
-  <circle cx="410" cy="14" r="2.5" fill="#2694CF"/>
+  <g fill="#2694CF" opacity=".35"><circle vector-effect="non-scaling-stroke" cx="410" cy="128" r="31"/><circle vector-effect="non-scaling-stroke" cx="410" cy="72" r="13"/><circle vector-effect="non-scaling-stroke" cx="452" cy="168" r="20"/></g>
+  <circle vector-effect="non-scaling-stroke" cx="410" cy="14" r="2.5" fill="#2694CF"/>
 </svg>

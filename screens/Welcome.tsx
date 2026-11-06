@@ -1,5 +1,4 @@
 "use client";
-import BrandLine from "@/components/BrandLine";
 import { PrimaryButton } from "@/components/Buttons";
 import GreetingDots from "@/components/GreetingDots";
 import Header from "@/components/Header";
@@ -16,58 +15,39 @@ interface WelcomeProps {
   onStart: () => void;
 }
 
-/** The five parts of the strategy, with the result screen's line illustrations. */
-const DEPTS = [
-  { key: "marketing", art: "marketing" },
-  { key: "socialMedia", art: "social" },
-  { key: "influencers", art: "influencers" },
-  { key: "event", art: "event" },
-  { key: "activation", art: "activation" },
-] as const;
-
 /**
- * design/screens/01-welcome.html, enriched at MCG's request: a short promise under the headline
- * and, along the bottom, the five parts every strategy covers (same icons as the result).
+ * WELCOME: a centred, minimal composition. The orb on a soft glow, a large centred promise and
+ * one button, and MCG's brand line sweeping across the page.
  */
 export default function Welcome({ t, lang, onLang, onStart }: WelcomeProps) {
   const w = t.welcome;
   return (
-    <Canvas>
+    <Canvas style={{ background: "radial-gradient(ellipse 70% 55% at 50% 22%, #E3F1FB 0%, rgba(227,241,251,0) 70%), #ffffff", overflow: "hidden" }}>
       <Header lang={lang} onLang={onLang} logoAlt={t.common.logoAlt} />
 
+      {/* Brand line: pink dot, a long sweep under the content, orange dot */}
+      <svg className={s.sweep} viewBox="0 0 1270 300" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M20 250 C 240 250, 300 120, 520 150 S 860 280, 1040 170 S 1220 60, 1250 70" fill="none" stroke="#144074" strokeWidth="2" vectorEffect="non-scaling-stroke" />
+        <circle cx="20" cy="250" r="9" fill="#E5418C" />
+        <circle cx="1250" cy="70" r="9" fill="#EF8E0A" />
+      </svg>
+
       <div className={s.body}>
-        <div className={s.visual}>
-          <BrandLine variant="welcome" className={s.line} />
-          <Orb state="idle" size={340} />
+        <div className={s.orbWrap}>
+          <i className={s.glow} aria-hidden="true" />
+          <Orb state="idle" size={190} />
         </div>
-
-        <div className={s.content}>
-          <div className={`grad ${s.hello}`}>
-            {w.hello}
-            <GreetingDots />
-          </div>
-          <h1 className={s.headline}>{w.headline}</h1>
-          <p className={s.sub}>{w.sub}</p>
-          <PrimaryButton className={s.talk} onClick={onStart}>
-            {w.start}
-            <ArrowIcon className={s.arrow} />
-          </PrimaryButton>
-
+        <div className={`grad ${s.hello}`}>
+          {w.hello}
+          <GreetingDots />
         </div>
+        <h1 className={s.headline}>{w.headline}</h1>
+        <p className={s.sub}>{w.sub}</p>
+        <PrimaryButton className={s.talk} onClick={onStart}>
+          {w.start}
+          <ArrowIcon className={s.arrow} />
+        </PrimaryButton>
       </div>
-
-      <section className={s.covers}>
-        <span className={s.coversLabel}>{w.covers}</span>
-        <ul className={s.depts}>
-          {DEPTS.map(({ key, art }) => (
-            <li key={key}>
-              {/* eslint-disable-next-line @next/next/no-img-element -- static SVG */}
-              <img src={`/illustrations/${art}.svg`} alt="" />
-              <span>{t.preview.depts[key]}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
 
       <footer className={s.footer}>{w.tagline}</footer>
     </Canvas>

@@ -24,7 +24,8 @@ const en = {
     headline: "Tell us about your business. We'll build your strategy.",
     sub: "Answer five quick questions and get a marketing strategy built for your business in about a minute.",
     start: "Let's start",
-    covers: "Every strategy covers",
+    stats: [["5", "quick questions"], ["20s", "to build it"], ["5", "areas covered"]] as [string, string][],
+    sampleTitle: "Own the after work moment in Salmiya",
     tagline: "Advertising. Content. Events. AI.",
   },
   questions: {
@@ -159,7 +160,8 @@ const ar: Dict = {
     headline: "حدّثنا عن مشروعك، وسنبني لك استراتيجيتك.",
     sub: "أجب عن خمسة أسئلة سريعة واحصل على استراتيجية تسويقية مصممة لمشروعك في نحو دقيقة.",
     start: "لنبدأ",
-    covers: "تشمل كل استراتيجية",
+    stats: [["5", "أسئلة سريعة"], ["20", "ثانية لإعدادها"], ["5", "محاور مغطاة"]] as [string, string][],
+    sampleTitle: "امتلك لحظة ما بعد الدوام في السالمية",
     tagline: "إعلانات. محتوى. فعاليات. ذكاء اصطناعي.",
   },
   questions: {

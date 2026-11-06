@@ -12,14 +12,16 @@ interface HeaderProps {
   /** Hidden on Welcome and Thank you. */
   startOverLabel?: string;
   onStartOver?: () => void;
+  /** White logo and a translucent language toggle, for the navy Welcome. */
+  dark?: boolean;
 }
 
-export default function Header({ lang, onLang, logoAlt, startOverLabel, onStartOver }: HeaderProps) {
+export default function Header({ lang, onLang, logoAlt, startOverLabel, onStartOver, dark }: HeaderProps) {
   // Active language sits first in reading order (rtl-arabic-*.html shows عربي | EN).
   const order: Lang[] = lang === "ar" ? ["ar", "en"] : ["en", "ar"];
   return (
-    <header className={s.header}>
-      <Image src="/brand/mcg-mark-color.png" alt={logoAlt} width={900} height={345} priority className={s.logo} />
+    <header className={dark ? `${s.header} ${s.dark}` : s.header}>
+      <Image src={dark ? "/brand/mcg-mark-white.png" : "/brand/mcg-mark-color.png"} alt={logoAlt} width={900} height={345} priority className={s.logo} />
       <div className={s.right}>
         {startOverLabel && onStartOver && (
           <SecondaryButton className={s.startOver} onClick={onStartOver}>
