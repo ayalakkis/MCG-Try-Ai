@@ -22,7 +22,6 @@
 /* Mic not detected: warm icon tile */
 .warm { background: #FFF1E6; color: #B4470B; }
 /* Didn't catch that: thinking orb in the 104 px icon slot */
-.orbSlot { height: 104px; display: flex; align-items: center; }
 .hold { gap: 14px; }
 .hold svg { font-size: 30px; }
 /* Inactivity timeout: 10 s countdown ring (.cd) */

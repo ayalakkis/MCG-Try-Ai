@@ -1,23 +1,5 @@
 import type { Lang } from "../i18n";
-import type { Brief, ConversationInput, ConversationTurn, ListenOptions, EmailRequest, LeadInput, LevelListener, Strategy } from "./types";
-
-export interface SpeechToText {
-  /** Starts capture. onPartial streams interim text, onFinal the settled text, onLevel live mic RMS 0–1. */
-  start(
-    onPartial: (text: string) => void,
-    onFinal: (text: string) => void,
-    onLevel: LevelListener,
-    options?: ListenOptions,
-  ): Promise<void>;
-  /** Stops capture and resolves with the final transcript ("" or ServiceError("missed") = nothing heard). */
-  stop(): Promise<string>;
-  /** Aborts without producing a transcript (finger slid off the button). */
-  cancel(): void;
-}
-
-export interface Conversation {
-  next(input: ConversationInput): Promise<ConversationTurn>;
-}
+import type { Brief, EmailRequest, LeadInput, LevelListener, Strategy } from "./types";
 
 export interface TextToSpeech {
   /** Speaks text in the given language (BCP 47, e.g. "en-US", "ar-KW") and reports the audio envelope 0–1. */
@@ -39,8 +21,6 @@ export interface LeadService {
 }
 
 export interface Services {
-  stt: SpeechToText;
-  conversation: Conversation;
   tts: TextToSpeech;
   strategy: StrategyService;
   email: EmailService;

@@ -6,11 +6,6 @@
 export const config = {
   /** Gemini models (ai.google.dev/gemini-api/docs/models, checked Oct 2026). Override per env. */
   models: {
-    /** Fast stable Flash for conversation turns and transcription. */
-    conversation: process.env.GEMINI_CONVERSATION_MODEL ?? "gemini-3.8-flash",
-    transcription: process.env.GEMINI_TRANSCRIPTION_MODEL ?? "gemini-3.8-flash",
-    /** Dedicated speech-to-text model used only to check that someone spoke (it never invents words). */
-    speechGate: process.env.GEMINI_SPEECH_GATE_MODEL ?? "gemini-3.5-transcribe",
     /**
      * Tested Oct 2026 on the full plan with low thinking: 3.8 Flash 16–18 s with fresh, Kuwaiti copy.
      * gemini-3.1-pro-preview (~25–40 s) and gemini-4-argon (~34 s) exceed the 25 s cap per attempt
@@ -55,28 +50,23 @@ export const config = {
    * for every visitor, so the limits are sized for a busy booth, not for one person.
    */
   rateLimit: {
-    conversation: { limit: 40, windowMs: 60_000 },
     strategy: { limit: 6, windowMs: 60_000 },
     email: { limit: 20, windowMs: 10 * 60_000 },
     emailPerAddress: { limit: 3, windowMs: 60 * 60_000 },
-    transcribe: { limit: 40, windowMs: 60_000 },
     speak: { limit: 60, windowMs: 60_000 },
     leads: { limit: 20, windowMs: 10 * 60_000 },
   },
 
   voice: {
-    /** Shorter holds count as an accidental tap (no "Didn't catch that"). */
-    minHoldMs: 450,
-    /** Vercel caps request bodies at 4.5 MB; 60 s of AAC at 64 kbps is about 0.5 MB. */
-    maxUploadBytes: 4 * 1024 * 1024,
-    /** Longest text sent to TTS (a question is at most limits.question). */
+    /** Longest text sent to TTS. */
     maxSpeakChars: 400,
-    /**
-     * Interim captions from the browser's SpeechRecognition while recording. "auto" skips
-     * iPad/iPhone, where Safari shares one mic between it and MediaRecorder; try "on" in /voice-lab.
-     */
-    liveCaptions: "auto" as "auto" | "on" | "off",
   },
+
+  /**
+   * Industry ids (lib/questions.ts) that have a photo at public/photos/<id>.jpg. Others show the
+   * tinted gradient. Add an id here when MCG supplies its photo.
+   */
+  photos: [] as string[],
 
   /** Seconds (HANDOFF.md §7). */
   timers: {
@@ -86,31 +76,24 @@ export const config = {
     thanks: 15,
   },
 
-  /** Most AI turns before CREATE starts anyway. */
-  maxTurns: 8,
-
   /**
    * Max characters per designed slot, so AI text never overflows the iPad layout.
-   * Sized against design/screens/03-conversation.html and 05-preview.html.
+   * Sized against design/screens/05-result.html and the email.
    */
   limits: {
-    question: 72,
-    quickAnswer: 22,
-    briefValue: 20,
     keyword: 14,
     /* Strategy (PREVIEW screen + email). Card text is clamped on screen; the detail sheet shows it all. */
     headline: 64,
     summary: 200,
     parameter: 44,
     cardTitle: 32,
-    cardIdea: 170,
+    /** One short line under each result card (05-result.html shows about 4 lines). */
+    cardIdea: 110,
     point: 125,
     platformName: 18,
     platformRole: 72,
     influencerMix: 44,
     eventWhen: 32,
-    splitChannel: 24,
-    budgetNote: 120,
     nextStep: 140,
     /** "Bloom Coffee" in the email headline. */
     brandName: 32,

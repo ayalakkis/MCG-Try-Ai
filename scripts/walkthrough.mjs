@@ -90,7 +90,7 @@ for (const lang of langs) {
   await button(t.startOver).first().click();
   await tick(500);
   if (lang === "ar") await button("عربي").click();
-  await dispatch({ type: "PICK_EXAMPLE", id: "walkthrough", brief: { brandName: "Bloom Coffee", business: { en: "Specialty café", ar: "مقهى مختص" }, goal: { en: "Evening visits", ar: "زوار بالمسا" }, audience: { en: "Young pros", ar: "موظفين شباب" }, location: { en: "Salmiya", ar: "السالمية" }, keywords: [{ en: "Salmiya", ar: "السالمية" }, { en: "After work", ar: "بعد الدوام" }, { en: "5–8 PM", ar: "5–8 المسا" }, { en: "Reels", ar: "ريلز" }] } }); // Examples were removed from Welcome
+  for (const a of [{ type: "START", id: "walkthrough" }, ...[["business", "Café & coffee", "مقهى وقهوة", "cafe"], ["audience", "Young professionals", "موظفون شباب", "professionals"], ["goal", "More visits", "زيارات أكثر", "visits"], ["challenge", "Slow days", "أيام بطيئة", "slow"], ["location", "Salmiya", "السالمية", "salmiya"]].map(([field, en, ar, optionId]) => ({ type: "ANSWER", field, value: { en, ar }, optionId })), { type: "QUESTIONS_DONE", brandName: "Bloom Coffee" }]) await dispatch(a); // Answers the 5 questions + business name
   await tick(12_000);
   await shot("create");
   await tick(26_000);

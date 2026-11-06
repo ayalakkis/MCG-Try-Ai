@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="32 12 176 146">
+  <defs><pattern id="g" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="1" fill="#C9D8E7"/></pattern></defs>
+  <rect width="240" height="170" fill="url(#g)" opacity=".7"/>
+  <circle cx="120" cy="85" r="62" fill="#fff"/>
+  <circle cx="120" cy="85" r="62" fill="none" stroke="#DCE7F2" stroke-width="1.5"/>
+  <circle cx="114" cy="91" r="34" fill="#2694CF" fill-opacity=".14"/>
+  <circle cx="114" cy="91" r="34" fill="none" stroke="#144074" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="114" cy="91" r="22" fill="none" stroke="#144074" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="114" cy="91" r="9" fill="#2694CF"/>
+  <path d="M114 91l38-38" fill="none" stroke="#144074" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M143 47l9 6-6 9" fill="none" stroke="#144074" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M152 53l10-2-2 10" fill="none" stroke="#144074" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

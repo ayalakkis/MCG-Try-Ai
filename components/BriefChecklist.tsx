@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { CheckIcon } from "./icons";
 import SectionLabel from "./SectionLabel";
 import s from "./BriefChecklist.module.css";
@@ -16,10 +17,12 @@ interface BriefChecklistProps {
   rows: BriefRow[];
   /** Text for the current row's value ("Now"). */
   nowLabel: string;
+  /** Shown between the title row and the rows (the Questions progress bars). */
+  between?: ReactNode;
 }
 
 /** Brief rows (one per BRIEF_FIELDS entry): done = dark check, current = spinner + "Now", pending = dashed circle. */
-export default function BriefChecklist({ title, rows, nowLabel }: BriefChecklistProps) {
+export default function BriefChecklist({ title, rows, nowLabel, between }: BriefChecklistProps) {
   const filled = rows.filter((r) => r.status === "done").length;
   return (
     <>
@@ -29,6 +32,7 @@ export default function BriefChecklist({ title, rows, nowLabel }: BriefChecklist
           {filled} / {rows.length}
         </span>
       </div>
+      {between}
       <div className={s.box}>
         {rows.map((r) => (
           <div key={r.key} className={[s.row, r.status === "current" ? s.current : "", r.status === "pending" ? s.pending : ""].join(" ")}>

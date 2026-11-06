@@ -3,23 +3,21 @@ import BrandLine from "@/components/BrandLine";
 import { PrimaryButton } from "@/components/Buttons";
 import GreetingDots from "@/components/GreetingDots";
 import Header from "@/components/Header";
-import { MicIcon } from "@/components/icons";
+import { ArrowIcon } from "@/components/icons";
 import Orb from "@/components/Orb";
 import { Canvas } from "@/components/Stage";
 import type { Dict, Lang } from "@/lib/i18n";
-import type { HoldButtonProps } from "@/lib/useHoldToTalk";
 import s from "./Welcome.module.css";
 
 interface WelcomeProps {
   t: Dict;
   lang: Lang;
   onLang: (lang: Lang) => void;
-  /** Pointer/keyboard handlers that start hold-to-talk. */
-  holdProps: HoldButtonProps;
+  onStart: () => void;
 }
 
-/** design/screens/01-welcome.html without the Examples cards (removed at MCG's request). */
-export default function Welcome({ t, lang, onLang, holdProps }: WelcomeProps) {
+/** design/screens/01-welcome.html without the Examples cards; "Let's start" opens the questions (no voice). */
+export default function Welcome({ t, lang, onLang, onStart }: WelcomeProps) {
   return (
     <Canvas>
       <Header lang={lang} onLang={onLang} logoAlt={t.common.logoAlt} />
@@ -36,9 +34,9 @@ export default function Welcome({ t, lang, onLang, holdProps }: WelcomeProps) {
             <GreetingDots />
           </div>
           <h1 className={s.headline}>{t.welcome.headline}</h1>
-          <PrimaryButton className={s.talk} {...holdProps}>
-            <MicIcon />
-            {t.welcome.holdToTalk}
+          <PrimaryButton className={s.talk} onClick={onStart}>
+            {t.welcome.start}
+            <ArrowIcon className={s.arrow} />
           </PrimaryButton>
         </div>
       </div>

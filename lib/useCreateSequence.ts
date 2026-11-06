@@ -36,10 +36,9 @@ type Result = { run: string; strategy: Strategy | null; failed: boolean; at: num
 
 export function useCreateSequence(state: SessionState, dispatch: Dispatch<Action>, services: Services): CreateProgress {
   const onCreate = state.screen === "create";
-  /** One run per visitor and brief; values from an earlier run read as fresh (0 / null). */
-  const run = `${state.sessionId}:${state.turnId}`;
-  /** Ask early: the brief is final once the AI's closing turn arrives. */
-  const requesting = onCreate || (state.screen === "conversation" && state.briefDone && !state.awaiting);
+  /** One run per visitor; values from an earlier run read as fresh (0 / null). */
+  const run = `${state.sessionId}`;
+  const requesting = onCreate;
   const [tick, setTick] = useState({ run: "", started: 0, now: 0 });
   const [result, setResult] = useState<Result>({ run: "", strategy: null, failed: false, at: 0 });
   const live = onCreate && tick.run === run;
@@ -56,8 +55,7 @@ export function useCreateSequence(state: SessionState, dispatch: Dispatch<Action
     return () => clearInterval(timer);
   }, [onCreate, run]);
 
-  // The request: starts with the closing turn (or CREATE), runs again on "Retry now" / auto-retry.
-  // A new `run` (turnId) restarts it if the visitor kept talking after the closing turn.
+  // The request: starts with CREATE, runs again on "Retry now" / auto-retry.
   useEffect(() => {
     if (!requesting) return;
     let alive = true;

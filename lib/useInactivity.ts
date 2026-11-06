@@ -2,7 +2,7 @@
 /**
  * Inactivity (HANDOFF.md §7): no tap for 60 s (90 s on Email) → "Still there?" sheet
  * with a 10 s countdown → onTimeout (wipe + Welcome). Any tap restarts the clock;
- * `busy` (finger held on the mic button) counts as activity the whole time it lasts. Typing, the AI
+ * `busy` counts as activity the whole time it is true. Typing, the AI
  * thinking and the AI speaking do not reset the clock (MCG's choice).
  */
 import { useCallback, useEffect, useRef, useState } from "react";

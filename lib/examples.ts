@@ -1,6 +1,5 @@
 /**
- * Canned briefs behind the three example cards on Welcome. Tapping one skips the conversation
- * and goes straight to CREATE, so each brief is complete and realistic for Kuwait.
+ * Complete, realistic Kuwait briefs for the offline mock, scripts and email tests.
  */
 import type { Brief, Localized } from "./services/types";
 
@@ -16,6 +15,8 @@ export const EXAMPLES: Record<ExampleId, ExampleBrief> = {
   cafe: {
     brandName: "Bloom Coffee",
     business: L("Specialty café", "مقهى مختص"),
+    industry: "cafe",
+    challenge: L("Slow days", "أيام بطيئة"),
     goal: L("Evening visits", "زيارات مسائية"),
     audience: L("Young pros", "موظفون شباب"),
     location: L("Salmiya", "السالمية"),
@@ -24,6 +25,8 @@ export const EXAMPLES: Record<ExampleId, ExampleBrief> = {
   /** Ramadan campaign: a family restaurant filling iftar and ghabga tables. */
   ramadan: {
     business: L("Family restaurant", "مطعم عائلي"),
+    industry: "restaurant",
+    challenge: L("Strong competition", "منافسة قوية"),
     goal: L("Iftar bookings", "حجوزات الإفطار"),
     audience: L("Families", "العائلات"),
     location: L("Kuwait City", "العاصمة"),
@@ -32,6 +35,8 @@ export const EXAMPLES: Record<ExampleId, ExampleBrief> = {
   /** Online sales: an Instagram abaya brand selling with delivery across Kuwait. */
   online: {
     business: L("Abaya online store", "متجر عبايات إلكتروني"),
+    industry: "retail",
+    challenge: L("Social media isn't working", "وسائل التواصل لا تنجح"),
     goal: L("More online sales", "مبيعات إلكترونية أكثر"),
     audience: L("Women 20–35", "نساء 20–35"),
     location: L("All Kuwait", "الكويت كلها"),

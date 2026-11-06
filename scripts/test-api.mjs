@@ -138,11 +138,7 @@ for (const d of ["marketing", "socialMedia", "influencers", "event", "activation
 line(`     platforms: ${s.socialMedia.platforms.map((x) => x.name[L2]).join(", ")}`);
 line(`     creators:  ${s.influencers.mix[L2]} · event: ${s.event.when[L2]}`);
 line(`     activation: ${s.activation.points.map((x) => x[L2]).join(" · ")}`);
-line(`   ▸ budget: KWD ${s.budget.monthlyMin}–${s.budget.monthlyMax}/month · ${s.budget.split.map((x) => `${x.channel[L2]} ${x.percent}%`).join(", ")}`);
 line(`   next step:   ${s.nextStep[L2]}`);
-const sum = s.budget.split.reduce((n, x) => n + x.percent, 0);
-check(sum === 100, `budget split adds up to ${sum}%, not 100%`);
-check(s.budget.monthlyMin > 0 && s.budget.monthlyMax >= s.budget.monthlyMin, "budget range is invalid");
 for (const k of ["en", "ar"]) {
   check(len(s.headline[k]) <= L.headline, `headline (${k}) ${len(s.headline[k])} > ${L.headline}`);
 }

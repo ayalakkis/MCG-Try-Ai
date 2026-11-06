@@ -130,14 +130,6 @@ export const GiftIcon = ({ style, className }: P) => (
   </svg>
 );
 
-export const WalletIcon = ({ style, className }: P) => (
-  <svg className={cls(className)} viewBox="0 0 24 24" style={style} aria-hidden="true">
-    <path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18v3" />
-    <rect x="4" y="8" width="16" height="11" rx="2.5" />
-    <path d="M16 13.5h2" />
-  </svg>
-);
-
 export const CloseIcon = ({ style, className }: P) => (
   <svg className={cls(className)} viewBox="0 0 24 24" style={style} aria-hidden="true">
     <path d="M6 6l12 12M18 6L6 18" />

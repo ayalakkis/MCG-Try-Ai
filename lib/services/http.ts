@@ -2,21 +2,17 @@
  * Browser clients for the route handlers in app/api/*. No keys here: every AI call runs on the server.
  */
 import type { z } from "zod";
-import { LiveCaptions } from "../audio/captions";
 import { Player } from "../audio/player";
-import { Recorder } from "../audio/recorder";
 import type { Lang } from "../i18n";
 import {
   ApiErrorSchema,
-  ConversationTurnSchema,
   EmailResponseSchema,
   LeadResponseSchema,
   StrategySchema,
-  TranscribeResponseSchema,
 } from "../schemas";
 import { ServiceError } from "./errors";
-import type { Conversation, EmailService, LeadService, SpeechToText, StrategyService, TextToSpeech } from "./interfaces";
-import type { Brief, ConversationInput, EmailRequest, LeadInput, LevelListener, ListenOptions } from "./types";
+import type { EmailService, LeadService, StrategyService, TextToSpeech } from "./interfaces";
+import type { Brief, EmailRequest, LeadInput, LevelListener } from "./types";
 
 export { ServiceError };
 
@@ -57,12 +53,6 @@ async function post<T>(url: string, body: BodyInit | object, schema: z.ZodType<T
   }
 }
 
-export class HttpConversation implements Conversation {
-  next(input: ConversationInput) {
-    return post("/api/conversation", input, ConversationTurnSchema, 65_000);
-  }
-}
-
 export class HttpStrategy implements StrategyService {
   generate(brief: Brief, lang: Lang, sessionId?: string) {
     return post("/api/strategy", { brief, lang, sessionId: sessionId || undefined }, StrategySchema, 95_000);
@@ -80,84 +70,6 @@ export class HttpLeads implements LeadService {
   async save(lead: LeadInput) {
     const { saved } = await post("/api/leads", lead, LeadResponseSchema, 20_000);
     return saved;
-  }
-}
-
-/**
- * Hold to talk → MediaRecorder (live levels from an AnalyserNode) → /api/transcribe (Gemini).
- * Interim captions come from the browser's SpeechRecognition where it can run next to the recorder.
- */
-/** Peak level (dB-mapped 0–1, about -40 dB) below which a recording holds no speech. */
-const MIN_SPEECH_LEVEL = 0.35;
-
-export class HttpSpeechToText implements SpeechToText {
-  private recorder: Recorder | null = null;
-  private captions = new LiveCaptions();
-  private options: ListenOptions = {};
-  /** Loudest level heard this hold (0–1); nothing near speech level = nothing to transcribe. */
-  private peak = 0;
-  /** What the browser live captions heard, sent along as a hint. */
-  private caption = { final: "", interim: "" };
-  /** Timings of the last utterance, for /voice-lab. */
-  last: { recordMs: number; bytes: number; mimeType: string; transcribeMs: number } | null = null;
-
-  constructor(private captionMode?: "auto" | "on" | "off") {}
-
-  async start(onPartial: (t: string) => void, onFinal: (t: string) => void, onLevel: LevelListener, options: ListenOptions = {}) {
-    this.cancel();
-    this.options = options;
-    const recorder = new Recorder();
-    this.recorder = recorder;
-    this.peak = 0;
-    const started = recorder.start((l) => {
-      this.peak = Math.max(this.peak, l);
-      onLevel(l);
-    });
-    this.caption = { final: "", interim: "" };
-    this.captions.start(
-      options.lang ?? "en",
-      (t) => {
-        this.caption.final = t;
-        onFinal(t);
-      },
-      (t) => {
-        this.caption.interim = t;
-        onPartial(t);
-      },
-      this.captionMode,
-    );
-    await started;
-  }
-
-  async stop(): Promise<string> {
-    const recorder = this.recorder;
-    this.recorder = null;
-    this.captions.stop();
-    if (!recorder) return "";
-    const rec = await recorder.stop();
-    if (rec.blob.size < 800) throw new ServiceError("missed", "too_short");
-    // Silence or a muted mic: skip the upload and show "Didn't catch that" straight away.
-    if (this.peak < MIN_SPEECH_LEVEL) throw new ServiceError("missed", "too_quiet");
-
-    const form = new FormData();
-    const ext = rec.mimeType.includes("mp4") ? "m4a" : rec.mimeType.includes("ogg") ? "ogg" : rec.mimeType.includes("wav") ? "wav" : "webm";
-    form.append("audio", rec.blob, `answer.${ext}`);
-    form.append("lang", this.options.lang ?? "en");
-    if (this.options.expect) form.append("expect", this.options.expect);
-    if (this.options.question) form.append("question", this.options.question);
-    const hint = `${this.caption.final} ${this.caption.interim}`.trim();
-    if (hint) form.append("hint", hint);
-
-    const t0 = performance.now();
-    const { text } = await post("/api/transcribe", form, TranscribeResponseSchema, 65_000);
-    this.last = { recordMs: Math.round(rec.durationMs), bytes: rec.blob.size, mimeType: rec.mimeType, transcribeMs: Math.round(performance.now() - t0) };
-    return text;
-  }
-
-  cancel() {
-    this.captions.stop();
-    this.recorder?.cancel();
-    this.recorder = null;
   }
 }
 

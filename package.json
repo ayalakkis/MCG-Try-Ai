@@ -16,6 +16,7 @@
     "db:migrate": "node scripts/db-migrate.mjs",
     "walkthrough": "node scripts/walkthrough.mjs",
     "email:icons": "node scripts/make-email-icons.mjs",
+    "email:art": "node scripts/make-email-art.mjs",
     "cert:dev": "node scripts/dev-cert.mjs",
     "dev:phone": "next dev --experimental-https --experimental-https-key certificates/dev-key.pem --experimental-https-cert certificates/dev-cert.pem -H 0.0.0.0",
     "db:demo": "node scripts/db-demo.mjs"

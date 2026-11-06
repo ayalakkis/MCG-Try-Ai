@@ -2,7 +2,8 @@
 /**
  * EMAIL → THANK YOU: sends the strategy once Send is pressed and moves on only after the send
  * succeeds. A rejected address shows the inline invalid-email state; anything else shows
- * "Reconnecting", whose retries re-send (the server dedupes with an idempotency key).
+ * "Reconnecting", whose retries re-send (the server dedupes with an idempotency key), unless the
+ * server says email can't be delivered at all: then "We couldn't send it", with no retry loop.
  * With consent, the lead is saved afterwards; that never blocks the visitor.
  */
 import { useEffect, type Dispatch } from "react";
@@ -33,6 +34,7 @@ export function useEmailSend(state: SessionState, dispatch: Dispatch<Action>, se
         if (!live) return;
         console.warn("[email]", e);
         if (e instanceof ServiceError && e.state === "invalid-email") dispatch({ type: "EMAIL_REJECTED" });
+        else if (e instanceof ServiceError && e.state === "send-failed") dispatch({ type: "EMAIL_FAILED" });
         else dispatch({ type: "ERROR", state: "reconnecting", retry: "email" });
       });
     return () => {

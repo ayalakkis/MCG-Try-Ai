@@ -66,7 +66,7 @@ export async function sendStrategyEmail(req: EmailRequest): Promise<string> {
   const from = process.env.EMAIL_FROM;
   if (!key || !from) {
     console.error("[email] RESEND_API_KEY and EMAIL_FROM must be set (.env.local)");
-    throw new HttpError(500, "email_config");
+    throw new HttpError(500, "email_config", "send-failed");
   }
   client ??= new Resend(key);
   const { html, text, subject, attachments } = await renderStrategyEmail(req);
@@ -95,7 +95,7 @@ export async function sendStrategyEmail(req: EmailRequest): Promise<string> {
       if (/testing emails|verify a domain|domain is not verified/i.test(msg)) {
         console.error(`[email] Resend refused the sender: ${msg}
   → verify a domain in Resend and set EMAIL_FROM to an address on it.`);
-        throw new HttpError(500, "email_config");
+        throw new HttpError(500, "email_config", "send-failed");
       }
       // The address itself was refused: show the inline invalid-email state, don't retry.
       if (err?.name === "validation_error" && /\bto\b|recipient|email address/i.test(msg) && !/from/i.test(msg)) {
@@ -103,7 +103,7 @@ export async function sendStrategyEmail(req: EmailRequest): Promise<string> {
       }
       if (err?.name && ["missing_api_key", "invalid_api_key", "restricted_api_key", "invalid_from_address"].includes(err.name)) {
         console.error(`[email] configuration problem: ${msg}`);
-        throw new HttpError(500, "email_config");
+        throw new HttpError(500, "email_config", "send-failed");
       }
       last = new HttpError(err?.name === "rate_limit_exceeded" ? 429 : 502, "email_upstream");
     } catch (e) {

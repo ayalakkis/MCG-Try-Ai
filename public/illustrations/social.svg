@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="32 12 176 146">
+  <defs><pattern id="g" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="1" fill="#C9D8E7"/></pattern></defs>
+  <rect width="240" height="170" fill="url(#g)" opacity=".7"/>
+  <circle cx="120" cy="85" r="62" fill="#fff"/>
+  <circle cx="120" cy="85" r="62" fill="none" stroke="#DCE7F2" stroke-width="1.5"/>
+  <rect x="96" y="40" width="48" height="90" rx="9" fill="#2694CF" fill-opacity=".14"/>
+  <rect x="96" y="40" width="48" height="90" rx="9" fill="none" stroke="#144074" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M114 48h12" fill="none" stroke="#144074" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M106 66h28M106 76h20M106 86h24" fill="none" stroke="#144074" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M150 58h26a6 6 0 0 1 6 6v12a6 6 0 0 1-6 6h-14l-8 7v-7h-4" fill="none" stroke="#144074" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="160" cy="70" r="2.2" fill="#2694CF"/><circle cx="168" cy="70" r="2.2" fill="#2694CF"/>
+  <path d="M90 100H66a6 6 0 0 0-6 6v10a6 6 0 0 0 6 6h4v7l8-7h12" fill="none" stroke="#144074" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M70 111l4 4 8-8" fill="none" stroke="#2694CF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

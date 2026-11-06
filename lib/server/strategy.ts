@@ -26,12 +26,6 @@ const Core = z.object({
 const PartA = z.object({
   marketing: z.object({ title: Text, idea: Text, points: Points(2, 3) }),
   socialMedia: z.object({ title: Text, idea: Text, platforms: z.array(z.object({ name: Text, role: Text })).min(2).max(3) }),
-  budget: z.object({
-    monthlyMin: z.number().int().describe("KWD per month"),
-    monthlyMax: z.number().int().describe("KWD per month"),
-    split: z.array(z.object({ channel: Text, percent: z.number().int() })).min(3).max(5),
-    note: Text,
-  }),
   nextStep: Text,
 });
 const PartB = z.object({
@@ -52,12 +46,6 @@ const _ModelStrategy = z.object({
   influencers: z.object({ title: Text, idea: Text, mix: Text, points: Points(2, 2) }),
   event: z.object({ title: Text, idea: Text, when: Text, points: Points(2, 2) }),
   activation: z.object({ title: Text, idea: Text, points: Points(2, 2), offers: Points(2, 3) }),
-  budget: z.object({
-    monthlyMin: z.number().int().describe("KWD per month"),
-    monthlyMax: z.number().int().describe("KWD per month"),
-    split: z.array(z.object({ channel: Text, percent: z.number().int() })).min(3).max(5),
-    note: Text,
-  }),
   nextStep: Text,
   keywords: Points(4, 4),
 });
@@ -109,26 +97,9 @@ function slots(s: ModelStrategy): Slot[] {
     ...list("eventPoint", s.event.points, L.point, true),
     ...list("activationPoint", s.activation.points, L.point, true),
     ...list("offer", s.activation.offers, L.point, true),
-    ...s.budget.split.map((x, i) => one(`splitChannel${i}`, x as unknown as Record<string, Localized>, "channel", L.splitChannel)),
-    one("budgetNote", s.budget as unknown as Record<string, Localized>, "note", L.budgetNote, true),
     one("nextStep", top, "nextStep", L.nextStep, true),
     ...list("keyword", s.keywords, L.keyword),
   ];
-}
-
-/** Whole percents that add up to exactly 100 (largest remainder). */
-function normalizeSplit(split: { percent: number }[]) {
-  const total = split.reduce((n, x) => n + Math.max(0, x.percent), 0) || 1;
-  const raw = split.map((x) => (Math.max(0, x.percent) / total) * 100);
-  const floors = raw.map(Math.floor);
-  let left = 100 - floors.reduce((a, b) => a + b, 0);
-  const order = raw.map((r, i) => [r - floors[i], i] as const).sort((a, b) => b[0] - a[0]);
-  for (const [, i] of order) if (left-- > 0) floors[i]++;
-  // No channel at 0%; any point that adds comes off the largest share, so the total stays 100.
-  const pct = floors.map((f) => Math.max(1, f));
-  const big = pct.indexOf(Math.max(...pct));
-  pct[big] -= pct.reduce((a, b) => a + b, 0) - 100;
-  split.forEach((x, i) => (x.percent = pct[i]));
 }
 
 export async function generateStrategy({ brief, lang }: StrategyRequest): Promise<Strategy> {
@@ -166,10 +137,8 @@ ${prompt}`,
   const given = `CORE STRATEGY (already decided; every idea must serve it):
 ${JSON.stringify(core)}`;
   const [a, b] = await Promise.all([
-    call(PartA, `TASK: write only marketing, socialMedia, budget and nextStep.
-${given}`, (d) =>
-      d.budget.monthlyMin <= 0 || d.budget.monthlyMax < d.budget.monthlyMin ? "budget: monthlyMin must be > 0 and <= monthlyMax." : null,
-    ),
+    call(PartA, `TASK: write only marketing, socialMedia and nextStep.
+${given}`),
     call(PartB, `TASK: write only influencers, event and activation.
 ${given}`),
   ]);
@@ -178,12 +147,5 @@ ${given}`),
   // Clean cut for anything still over its slot (sentences end in "…", labels cut at a word).
   for (const x of slots(s)) if (over(x.get(), x.max)) x.set(both(x.get(), x.max, x.sentence));
 
-  normalizeSplit(s.budget.split);
-  const round = (n: number) => (n >= 1000 ? Math.round(n / 100) * 100 : Math.round(n / 50) * 50) || 50;
-
-  return {
-    id: randomUUID(),
-    ...s,
-    budget: { ...s.budget, monthlyMin: round(s.budget.monthlyMin), monthlyMax: Math.max(round(s.budget.monthlyMax), round(s.budget.monthlyMin)) },
-  };
+  return { id: randomUUID(), ...s };
 }

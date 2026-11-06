@@ -1,15 +1,13 @@
 "use client";
 import type { ReactNode } from "react";
 import type { Dict, Lang } from "@/lib/i18n";
-import type { HoldButtonProps } from "@/lib/useHoldToTalk";
 import { PrimaryButton, SecondaryButton } from "./Buttons";
-import { MicIcon, MicOffIcon, WifiOffIcon } from "./icons";
-import Orb from "./Orb";
+import { MailIcon, WifiOffIcon } from "./icons";
 import SectionLabel from "./SectionLabel";
 import s from "./SystemSheet.module.css";
 
 /** API error states (invalid-email is inline on screen 06) plus the two UI-only sheets. */
-export type SheetState = "reconnecting" | "mic" | "missed" | "idle" | "privacy";
+export type SheetState = "reconnecting" | "send-failed" | "idle" | "privacy";
 
 interface SystemSheetProps {
   state: SheetState;
@@ -18,10 +16,8 @@ interface SystemSheetProps {
   onStartOver: () => void;
   /** reconnecting: "Retry now". */
   onRetry?: () => void;
-  /** mic: "Try again"; missed: "Tap an answer"; privacy: "Close". */
+  /** send-failed: "Back"; privacy: "Close". */
   onDismiss?: () => void;
-  /** missed: "Hold to try again" starts a new hold right from the sheet. */
-  holdProps?: HoldButtonProps;
   /** idle: seconds left before the reset, and "I'm here". */
   countdown?: number;
   onStillHere?: () => void;
@@ -43,47 +39,6 @@ export default function SystemSheet(p: SystemSheetProps) {
   let actions: ReactNode;
 
   switch (state) {
-    case "mic":
-      label = e.micLabel;
-      icon = (
-        <span className={`${s.ic} ${s.warm}`}>
-          <MicOffIcon />
-        </span>
-      );
-      title = e.micTitle;
-      body = e.micBody;
-      actions = (
-        <>
-          <PrimaryButton className={s.btn} onClick={p.onDismiss}>
-            {e.tryAgain}
-          </PrimaryButton>
-          <SecondaryButton className={s.btn} onClick={p.onStartOver}>
-            {t.common.startOver}
-          </SecondaryButton>
-        </>
-      );
-      break;
-    case "missed":
-      label = e.missedLabel;
-      icon = (
-        <span className={s.orbSlot}>
-          <Orb state="think" size={96} />
-        </span>
-      );
-      title = e.missedTitle;
-      body = e.missedBody;
-      actions = (
-        <>
-          <PrimaryButton className={`${s.btn} ${s.hold}`} {...p.holdProps}>
-            <MicIcon />
-            {e.holdTryAgain}
-          </PrimaryButton>
-          <SecondaryButton className={s.btn} onClick={p.onDismiss}>
-            {e.tapAnswer}
-          </SecondaryButton>
-        </>
-      );
-      break;
     case "idle": {
       const n = p.countdown ?? 0;
       const pct = `${(n / 10) * 100}%`;
@@ -108,6 +63,26 @@ export default function SystemSheet(p: SystemSheetProps) {
       );
       break;
     }
+    case "send-failed":
+      label = e.sendLabel;
+      icon = (
+        <span className={`${s.ic} ${s.warm}`}>
+          <MailIcon />
+        </span>
+      );
+      title = e.sendTitle;
+      body = e.sendBody;
+      actions = (
+        <>
+          <PrimaryButton className={s.btn} onClick={p.onDismiss}>
+            {e.back}
+          </PrimaryButton>
+          <SecondaryButton className={s.btn} onClick={p.onStartOver}>
+            {t.common.startOver}
+          </SecondaryButton>
+        </>
+      );
+      break;
     case "privacy":
       label = t.email.privacy;
       icon = null;

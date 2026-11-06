@@ -1,8 +1,9 @@
 /**
  * The strategy email. It shows exactly what the visitor saw on the PREVIEW screen, so it is
  * valuable on its own and leaves the next step to the MCG team:
- * logo bar, greeting, the strategy line, strategy parameters, one section per department
- * (marketing, social media, influencers, event, activation & offers, finance), dark CTA, footer.
+ * logo bar, greeting, a navy banner with the strategy line, its facts and the Kuwait skyline,
+ * one section per department with its line icon (the result screen's illustrations as PNG,
+ * see scripts/make-email-art.mjs), dark CTA, footer.
  * Email-safe: tables for layout, inline styles only, no SVG, no CSS grid/flex, solid-colour
  * fallbacks wherever the design uses gradients (Gmail drops background-clip text).
  */
@@ -29,6 +30,12 @@ export const EMAIL_IMAGES: Record<string, string> = {
   "brand/mcg-logo-color.png": "mcg-logo",
   "email/whatsapp-ink.png": "icon-whatsapp",
   "email/instagram-white.png": "icon-instagram",
+  "email/art/skyline.png": "art-skyline",
+  "email/art/marketing.png": "art-marketing",
+  "email/art/social.png": "art-social",
+  "email/art/influencers.png": "art-influencers",
+  "email/art/event.png": "art-event",
+  "email/art/activation.png": "art-activation",
 };
 
 /** Per-language type scale: the Arabic reference uses larger sizes and taller lines. */
@@ -50,7 +57,6 @@ const C = {
   pink: "#E5418C",
   dot: "#1EA5E0",
 };
-const SPLIT = ["#144074", "#2694CF", "#8CC4E8", "#E5418C", "#EF8E0A"];
 
 export default function StrategyEmailBase({ lang, strategy, brief, name = "", appUrl }: StrategyEmailProps & { lang: Lang }) {
   const t = dict(lang);
@@ -62,7 +68,6 @@ export default function StrategyEmailBase({ lang, strategy, brief, name = "", ap
   const start = rtl ? "right" : "left";
   const L = (x: Localized | undefined) => x?.[lang] ?? "";
   const src = (path: string) => (appUrl === "cid:" ? `cid:${EMAIL_IMAGES[path]}` : `${appUrl.replace(/\/+$/, "")}/${path}`);
-  const range = p.kwd(strategy.budget.monthlyMin.toLocaleString("en-US"), strategy.budget.monthlyMax.toLocaleString("en-US"));
 
   const sec: CSSProperties = { padding: "30px 44px", borderTop: `1px solid ${C.rule}` };
   const lblStyle: CSSProperties = { ...T.lbl, fontWeight: 700, color: C.blue, margin: "0 0 10px", lineHeight: 1.4 };
@@ -107,10 +112,27 @@ export default function StrategyEmailBase({ lang, strategy, brief, name = "", ap
     [p.params.area, L(brief.location) || "–"],
     [p.params.objective, L(strategy.objective)],
     [p.params.focus, L(strategy.funnelStage)],
-    [p.params.budget, `${range} ${p.perMonth}`],
   ];
-  const pairs = [params.slice(0, 2), params.slice(2, 4), params.slice(4)];
-  const half = (j: number) => `0 ${j === 0 ? (rtl ? "0" : "6px") : rtl ? "6px" : "0"} 12px ${j === 0 ? (rtl ? "6px" : "0") : rtl ? "0" : "6px"}`;
+  /** One department: its line icon beside the label, title and idea, then the details full width. */
+  const dept = (art: string, labelText: string, titleText: string, idea: string, details: ReactNode) => (
+    <Section style={sec}>
+      <table role="presentation" width="100%" cellPadding={0} cellSpacing={0} style={{ borderCollapse: "collapse" }}>
+        <tbody>
+          <tr>
+            <td width="104" style={{ width: 104, verticalAlign: "top", paddingTop: 2 }}>
+              <Img src={src(`email/art/${art}.png`)} width="88" height="73" alt="" style={{ display: "block", border: 0, borderRadius: 14 }} />
+            </td>
+            <td style={{ verticalAlign: "top", textAlign: start }}>
+              {label(labelText)}
+              {title(titleText)}
+              {para(idea)}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      {details}
+    </Section>
+  );
 
   return (
     <Html lang={rtl ? "ar" : "en"} dir={dir}>
@@ -133,69 +155,43 @@ export default function StrategyEmailBase({ lang, strategy, brief, name = "", ap
           </Section>
 
           <Section style={{ backgroundColor: "#ffffff", borderRadius: 28, boxShadow: "0 20px 60px rgba(10,30,70,.12)", overflow: "hidden" }}>
-            {/* Hero: greeting + the strategy in one line */}
-            <Section style={{ padding: "44px 44px 34px", backgroundColor: "#ffffff", backgroundImage: `radial-gradient(120% 90% at ${rtl ? "0%" : "100%"} 0%, #E8F2FB 0%, #FFFFFF 55%)` }}>
-              <div style={{ width: 52, height: 52, borderRadius: "50%", backgroundColor: C.cyan, backgroundImage: "radial-gradient(circle at 34% 28%,#fff 0%,#CFE7F7 20%,#2694CF 55%,#144074 100%)", boxShadow: "0 3px 10px rgba(20,64,116,.35)", marginBottom: 20 }} />
+            {/* Greeting */}
+            <Section style={{ padding: "40px 44px 26px" }}>
               <p style={{ margin: "0 0 6px", fontSize: T.hello, fontWeight: 600, color: C.cyan, lineHeight: 1.3 }}>{m.hello(name)}</p>
-              <p style={{ margin: "0 0 18px", fontSize: T.small, color: C.muted, lineHeight: T.line }}>{m.intro}</p>
-              {label(m.headline(brief.brandName ?? ""))}
-              <h1 style={{ margin: 0, fontSize: 32, lineHeight: T.h1Line, fontWeight: 700, letterSpacing: T.tight, color: C.ink }}>{L(strategy.headline)}</h1>
+              <p style={{ margin: 0, fontSize: T.small, color: C.muted, lineHeight: T.line }}>{m.intro}</p>
             </Section>
 
-            {/* Brand rule: orange dot, gradient line, pink dot */}
-            <Section style={{ padding: "0 40px" }}>
-              <table role="presentation" width="100%" cellPadding={0} cellSpacing={0} style={{ borderCollapse: "collapse" }}>
+            {/* Banner: the strategy line and its facts on navy, the Kuwait skyline beside it */}
+            <Section style={{ padding: "0 24px" }}>
+              <table role="presentation" width="100%" cellPadding={0} cellSpacing={0} bgcolor={C.ink} style={{ borderCollapse: "separate", backgroundColor: C.ink, borderRadius: 24 }}>
                 <tbody>
                   <tr>
-                    <td width="14" style={{ width: 14 }}>
-                      <div style={{ width: 14, height: 14, borderRadius: "50%", backgroundColor: rtl ? C.pink : C.orange }} />
+                    <td style={{ verticalAlign: "bottom", padding: rtl ? "30px 28px 28px 0" : "30px 0 28px 28px", textAlign: start }}>
+                      <p style={{ margin: "0 0 8px", fontSize: T.small, fontWeight: 600, color: "#8CCAEE" }}>{m.headline(brief.brandName ?? "")}</p>
+                      <h1 style={{ margin: "0 0 16px", fontSize: 28, lineHeight: T.h1Line, fontWeight: 700, letterSpacing: T.tight, color: "#ffffff" }}>{L(strategy.headline)}</h1>
+                      {params.map(([k, v]) => (
+                        <span key={k} style={{ display: "inline-block", margin: rtl ? "0 0 6px 6px" : "0 6px 6px 0", padding: "5px 12px", borderRadius: 999, border: "1px solid rgba(255,255,255,.28)", backgroundColor: "#1E4F86", fontSize: 12.5, fontWeight: 600, color: "#ffffff", lineHeight: 1.4 }}>
+                          <span style={{ color: "#B9D3EA", fontWeight: 500 }}>{k}</span> {v}
+                        </span>
+                      ))}
                     </td>
-                    <td style={{ verticalAlign: "middle" }}>
-                      <div style={{ height: 6, borderRadius: 99, backgroundColor: C.blue, backgroundImage: `linear-gradient(${rtl ? 270 : 90}deg,#2694CF,#125D99 60%,#144074)`, margin: "0 -4px" }} />
-                    </td>
-                    <td width="14" style={{ width: 14 }}>
-                      <div style={{ width: 14, height: 14, borderRadius: "50%", backgroundColor: rtl ? C.orange : C.pink }} />
+                    <td width="196" style={{ width: 196, verticalAlign: "bottom", padding: rtl ? "0 16px 18px 0" : "0 0 18px 16px" }}>
+                      <Img src={src("email/art/skyline.png")} width="164" height="158" alt="" style={{ display: "block", border: 0, ...(rtl ? { transform: "scaleX(-1)" } : {}) }} />
                     </td>
                   </tr>
                 </tbody>
               </table>
             </Section>
 
-            {/* Strategy parameters */}
-            <Section style={{ ...sec, borderTop: "none" }}>
-              {label(p.parameters)}
-              <table role="presentation" width="100%" cellPadding={0} cellSpacing={0} style={{ borderCollapse: "separate", borderSpacing: 0 }}>
-                <tbody>
-                  {pairs.map((pair, i) => (
-                    <tr key={i}>
-                      {pair.map(([k, v], j) => (
-                        // A lone last parameter (the budget) spans the full row.
-                        <td key={j} colSpan={pair.length === 1 ? 2 : 1} width={pair.length === 1 ? "100%" : "50%"} style={{ width: pair.length === 1 ? "100%" : "50%", verticalAlign: "top", padding: pair.length === 1 ? "0" : half(j) }}>
-                          <div style={{ backgroundColor: C.soft, borderRadius: 14, padding: "12px 14px" }}>
-                            <p style={{ margin: "0 0 3px", fontSize: 12, fontWeight: 600, color: C.muted }}>{k}</p>
-                            <p style={{ margin: 0, fontSize: T.small + 0.5, fontWeight: 700, color: C.ink, lineHeight: 1.4 }}>{v}</p>
-                          </div>
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </Section>
+            <Section style={{ height: 14, lineHeight: "14px", fontSize: 0 }}>&nbsp;</Section>
 
-            {/* Marketing */}
-            <Section style={sec}>
-              {label(p.depts.marketing)}
-              {title(L(strategy.marketing.title))}
-              {para(L(strategy.marketing.idea))}
-              {bullets(strategy.marketing.points)}
-            </Section>
+            {dept("marketing", p.depts.marketing, L(strategy.marketing.title), L(strategy.marketing.idea), bullets(strategy.marketing.points))}
 
-            {/* Social media */}
-            <Section style={sec}>
-              {label(p.depts.socialMedia)}
-              {title(L(strategy.socialMedia.title))}
-              {para(L(strategy.socialMedia.idea))}
+            {dept(
+              "social",
+              p.depts.socialMedia,
+              L(strategy.socialMedia.title),
+              L(strategy.socialMedia.idea),
               <table role="presentation" width="100%" cellPadding={0} cellSpacing={0} style={{ borderCollapse: "collapse" }}>
                 <tbody>
                   {strategy.socialMedia.platforms.map((x, i, all) => (
@@ -205,62 +201,43 @@ export default function StrategyEmailBase({ lang, strategy, brief, name = "", ap
                     </tr>
                   ))}
                 </tbody>
-              </table>
-            </Section>
+              </table>,
+            )}
 
-            {/* Influencers */}
-            <Section style={sec}>
-              {label(p.depts.influencers)}
-              {title(L(strategy.influencers.title))}
-              {para(L(strategy.influencers.idea))}
-              {tag(p.creators, L(strategy.influencers.mix))}
-              {bullets(strategy.influencers.points)}
-            </Section>
+            {dept(
+              "influencers",
+              p.depts.influencers,
+              L(strategy.influencers.title),
+              L(strategy.influencers.idea),
+              <>
+                {tag(p.creators, L(strategy.influencers.mix))}
+                {bullets(strategy.influencers.points)}
+              </>,
+            )}
 
-            {/* Event */}
-            <Section style={sec}>
-              {label(p.depts.event)}
-              {title(L(strategy.event.title))}
-              {para(L(strategy.event.idea))}
-              {tag(p.when, L(strategy.event.when))}
-              {bullets(strategy.event.points)}
-            </Section>
+            {dept(
+              "event",
+              p.depts.event,
+              L(strategy.event.title),
+              L(strategy.event.idea),
+              <>
+                {tag(p.when, L(strategy.event.when))}
+                {bullets(strategy.event.points)}
+              </>,
+            )}
 
-            {/* Activation & offers: how it runs, then the offers */}
-            <Section style={sec}>
-              {label(p.depts.activation)}
-              {title(L(strategy.activation.title))}
-              {para(L(strategy.activation.idea))}
-              <p style={{ margin: "0 0 8px", fontSize: 12.5, fontWeight: 700, color: C.blue }}>{p.howItRuns}</p>
-              {bullets(strategy.activation.points)}
-              <p style={{ margin: "0 0 8px", fontSize: 12.5, fontWeight: 700, color: C.blue }}>{p.offers}</p>
-              {bullets(strategy.activation.offers)}
-            </Section>
-
-            {/* Finance: budget range + split */}
-            <Section style={sec}>
-              {label(p.depts.budget)}
-              <h2 style={{ margin: "0 0 4px", fontSize: 28, fontWeight: 700, letterSpacing: T.tight, color: C.ink }}>
-                {range} <span style={{ fontSize: 15, fontWeight: 600, color: C.muted }}>{p.perMonth}</span>
-              </h2>
-              {para(L(strategy.budget.note))}
-              <p style={{ margin: "0 0 8px", fontSize: 12.5, fontWeight: 700, color: C.blue }}>{p.split}</p>
-              <table role="presentation" width="100%" cellPadding={0} cellSpacing={0} style={{ borderCollapse: "collapse" }}>
-                <tbody>
-                  {strategy.budget.split.map((x, i) => (
-                    <tr key={i}>
-                      <td width="200" style={{ width: 200, padding: "7px 0", fontSize: T.small, fontWeight: 600, color: C.ink, textAlign: start }}>{L(x.channel)}</td>
-                      <td style={{ padding: "7px 12px" }}>
-                        <div style={{ height: 10, borderRadius: 99, backgroundColor: "#EEF2F7" }}>
-                          <div style={{ width: `${x.percent}%`, height: 10, borderRadius: 99, backgroundColor: SPLIT[i % SPLIT.length] }} />
-                        </div>
-                      </td>
-                      <td width="48" style={{ width: 48, padding: "7px 0", fontSize: T.small, fontWeight: 700, color: C.ink, textAlign: rtl ? "left" : "right" }}>{x.percent}%</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </Section>
+            {dept(
+              "activation",
+              p.depts.activation,
+              L(strategy.activation.title),
+              L(strategy.activation.idea),
+              <>
+                <p style={{ margin: "0 0 8px", fontSize: 12.5, fontWeight: 700, color: C.blue }}>{p.howItRuns}</p>
+                {bullets(strategy.activation.points)}
+                <p style={{ margin: "0 0 8px", fontSize: 12.5, fontWeight: 700, color: C.blue }}>{p.offers}</p>
+                {bullets(strategy.activation.offers)}
+              </>,
+            )}
 
             {/* CTA */}
             <Section style={{ padding: "8px 24px 24px" }}>

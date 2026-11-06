@@ -1,38 +1,27 @@
 /**
- * The whole app is one state machine (HANDOFF.md §5). There are no URL routes per screen,
+ * The whole app is one state machine. There are no URL routes per screen,
  * so the booth device can never navigate "back" into a previous visitor's session.
  * The session lives in client memory only and is wiped by Start over / Not now / timeouts.
- * Audio is never stored here.
+ * Nothing is recorded: the visitor answers by tapping.
  */
 import type { Lang } from "./i18n";
+import { QUESTIONS } from "./questions";
 import type { ErrorState } from "./schemas";
-import type { Brief, BriefField, HistoryItem, Localized, QuickAnswer, Strategy } from "./services/types";
+import type { Brief, BriefField, Localized, Strategy } from "./services/types";
 
-export type Screen = "welcome" | "listening" | "conversation" | "create" | "preview" | "email" | "thanks";
+export type Screen = "welcome" | "questions" | "create" | "preview" | "email" | "thanks";
 
 /** Which request a "Reconnecting" sheet will retry. */
-export type RetryTarget = "conversation" | "strategy" | "email";
+export type RetryTarget = "strategy" | "email";
 
 export interface SessionState {
   /** Visitor session id ("" until a visitor starts). */
   id: string;
   screen: Screen;
   lang: Lang;
-  /** Where LISTENING returns to on cancel. */
-  listenFrom: "welcome" | "conversation";
   brief: Brief;
-  /** Earlier turns, oldest first. The pending answer is in lastAnswer until the AI replies. */
-  history: HistoryItem[];
-  asking: BriefField | null;
-  question: Localized | null;
-  quickAnswers: QuickAnswer[];
-  lastAnswer: string | null;
-  /** A visitor answer is waiting for Conversation.next(). */
-  awaiting: boolean;
-  /** Increments on every AI turn, so each question is spoken once. */
-  turnId: number;
-  /** The last turn closed the brief; go to CREATE once it has been spoken. */
-  briefDone: boolean;
+  /** Index into QUESTIONS; QUESTIONS.length = the optional business-name step. */
+  step: number;
   /** Increments on reset so late async results from a previous visitor are dropped. */
   sessionId: number;
   strategy: Strategy | null;
@@ -53,16 +42,8 @@ export const initialState: SessionState = {
   id: "",
   screen: "welcome",
   lang: "en",
-  listenFrom: "welcome",
   brief: {},
-  history: [],
-  asking: null,
-  question: null,
-  quickAnswers: [],
-  lastAnswer: null,
-  awaiting: false,
-  turnId: 0,
-  briefDone: false,
+  step: 0,
   sessionId: 0,
   strategy: null,
   email: "",
@@ -76,13 +57,12 @@ export const initialState: SessionState = {
 
 export type Action =
   | { type: "SET_LANG"; lang: Lang }
-  | { type: "HOLD_START"; id: string }
-  | { type: "LISTEN_CANCEL" }
-  | { type: "LISTEN_SEND"; transcript: string }
-  | { type: "TURN"; brief: Brief; asking: BriefField | null; question: Localized; quickAnswers: QuickAnswer[]; done: boolean }
-  | { type: "QUICK_ANSWER"; answer: string }
-  | { type: "PICK_EXAMPLE"; brief: Brief; id: string }
-  | { type: "BRIEF_COMPLETE" }
+  | { type: "START"; id: string }
+  /** A tapped (or typed "Other") answer to the current question. */
+  | { type: "ANSWER"; field: BriefField; value: Localized; optionId: string }
+  | { type: "BACK" }
+  /** Last step: the optional business name, then CREATE. */
+  | { type: "QUESTIONS_DONE"; brandName: string }
   | { type: "STRATEGY_READY"; strategy: Strategy }
   | { type: "EMAIL_REQUEST" }
   | { type: "NOT_NOW" }
@@ -91,6 +71,8 @@ export type Action =
   | { type: "EMAIL_EDIT" }
   | { type: "EMAIL_SENT" }
   | { type: "ERROR"; state: ErrorState; retry?: RetryTarget }
+  /** Email can't be delivered at all (sender not set up): retrying won't help. */
+  | { type: "EMAIL_FAILED" }
   | { type: "RETRY" }
   | { type: "DISMISS_ERROR" }
   | { type: "RESET" };
@@ -102,39 +84,22 @@ export function reducer(state: SessionState, action: Action): SessionState {
   switch (action.type) {
     case "SET_LANG":
       return { ...state, lang: action.lang };
-    case "HOLD_START":
-      if (state.screen !== "welcome" && state.screen !== "conversation") return state;
-      return { ...state, id: state.id || action.id, screen: "listening", listenFrom: state.screen, error: null };
-    case "LISTEN_CANCEL":
-      return state.screen === "listening" ? { ...state, screen: state.listenFrom } : state;
-    case "LISTEN_SEND":
-      return state.screen === "listening"
-        ? { ...state, screen: "conversation", lastAnswer: action.transcript, awaiting: true }
-        : state;
-    case "TURN": {
-      const history: HistoryItem[] = [...state.history];
-      if (state.lastAnswer) history.push({ role: "visitor", text: state.lastAnswer });
-      history.push({ role: "ai", text: action.question.en });
-      return {
-        ...state,
-        awaiting: false,
-        turnId: state.turnId + 1,
-        history,
-        brief: action.brief,
-        asking: action.asking,
-        question: action.question,
-        quickAnswers: action.quickAnswers,
-        briefDone: action.done,
-        error: null,
-      };
+    case "START":
+      return state.screen === "welcome" ? { ...state, id: state.id || action.id, screen: "questions", step: 0 } : state;
+    case "ANSWER": {
+      if (state.screen !== "questions" || QUESTIONS[state.step]?.field !== action.field) return state;
+      const brief: Brief = { ...state.brief, [action.field]: action.value };
+      if (action.field === "business") brief.industry = action.optionId;
+      return { ...state, brief, step: state.step + 1 };
     }
-    case "QUICK_ANSWER":
-      if (state.screen !== "conversation" || state.awaiting) return state;
-      return { ...state, lastAnswer: action.answer, awaiting: true };
-    case "PICK_EXAMPLE":
-      return { ...state, id: state.id || action.id, brief: action.brief, screen: "create" };
-    case "BRIEF_COMPLETE":
-      return state.screen === "conversation" ? { ...state, screen: "create" } : state;
+    case "BACK":
+      if (state.screen !== "questions") return state;
+      return state.step === 0 ? { ...state, screen: "welcome" } : { ...state, step: state.step - 1 };
+    case "QUESTIONS_DONE": {
+      if (state.screen !== "questions") return state;
+      const brandName = action.brandName.trim();
+      return { ...state, brief: { ...state.brief, brandName: brandName || undefined }, screen: "create" };
+    }
     case "STRATEGY_READY":
       return { ...state, strategy: action.strategy, screen: "preview", error: null };
     case "EMAIL_REQUEST":
@@ -146,6 +111,8 @@ export function reducer(state: SessionState, action: Action): SessionState {
       return { ...state, sending: false, emailRejected: true };
     case "EMAIL_EDIT":
       return state.emailRejected ? { ...state, emailRejected: false } : state;
+    case "EMAIL_FAILED":
+      return { ...state, sending: false, error: { state: "send-failed" } };
     case "EMAIL_SENT":
       return state.screen === "email" ? { ...state, sending: false, screen: "thanks", error: null } : state;
     case "ERROR":

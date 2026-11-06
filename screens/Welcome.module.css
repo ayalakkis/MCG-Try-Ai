@@ -10,3 +10,4 @@
 .talk svg { font-size: 28px; }
 
 .footer { text-align: center; font-size: 14px; font-weight: 500; color: #4E5F78; }
+[dir="rtl"] .arrow { transform: scaleX(-1); }

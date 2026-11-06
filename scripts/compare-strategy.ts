@@ -23,7 +23,6 @@ async function main() {
   console.log(`  influencer mix: ${L(s.influencers.mix)}; event when: ${L(s.event.when)}`);
   console.log(`  how it runs: ${s.activation.points.map((p) => p.en).join(" / ")}`);
   console.log(`  offers: ${s.activation.offers.map((o) => o.en).join(" / ")}`);
-  console.log(`\n[budget] KWD ${s.budget.monthlyMin}–${s.budget.monthlyMax}/month: ${s.budget.split.map((x) => `${x.channel.en} ${x.percent}%`).join(", ")}\n  ${L(s.budget.note)}`);
   console.log(`\nnext step: ${L(s.nextStep)}`);
 }
 main().catch((e) => {

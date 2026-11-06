@@ -3,8 +3,8 @@
  */
 import { z } from "zod";
 
-/** The brief fields, in the order the AI asks for them (HANDOFF.md §5; budget and timing removed at MCG's request). */
-export const BRIEF_FIELDS = ["business", "goal", "audience", "location"] as const;
+/** The brief fields, in the order the Questions screen asks them (voice, budget and timing removed at MCG's request). */
+export const BRIEF_FIELDS = ["business", "audience", "goal", "challenge", "location"] as const;
 
 export const LangSchema = z.enum(["en", "ar"]);
 export const LocalizedSchema = z.object({ en: z.string().trim().min(1), ar: z.string().trim().min(1) });
@@ -15,38 +15,13 @@ export const BriefSchema = z.object({
   goal: LocalizedSchema.optional(),
   audience: LocalizedSchema.optional(),
   location: LocalizedSchema.optional(),
+  /** What's holding them back (question 4). */
+  challenge: LocalizedSchema.optional(),
   keywords: z.array(LocalizedSchema).max(6).optional(),
-  /** The business's own name if the visitor said it ("Bloom Coffee"); used in the email headline. */
+  /** The business's own name if the visitor typed it ("Bloom Coffee"); used in the email headline. */
   brandName: z.string().trim().max(60).optional(),
-});
-
-export const HistoryItemSchema = z.object({
-  role: z.enum(["ai", "visitor"]),
-  text: z.string().max(600),
-});
-
-/* ---------- /api/conversation ---------- */
-
-export const ConversationRequestSchema = z.object({
-  lang: LangSchema,
-  brief: BriefSchema,
-  history: z.array(HistoryItemSchema).max(40),
-  lastAnswer: z.string().trim().max(600).nullable(),
-});
-export type ConversationRequest = z.infer<typeof ConversationRequestSchema>;
-
-export const QuickAnswerSchema = z.object({
-  id: z.string(),
-  label: LocalizedSchema,
-  value: LocalizedSchema.optional(),
-});
-
-export const ConversationTurnSchema = z.object({
-  question: LocalizedSchema,
-  asking: BriefFieldSchema.nullable(),
-  quickAnswers: z.array(QuickAnswerSchema).max(4),
-  briefUpdates: BriefSchema,
-  done: z.boolean(),
+  /** Industry option id from question 1; picks the result photos. */
+  industry: z.string().max(32).optional(),
 });
 
 /* ---------- /api/strategy ---------- */
@@ -88,13 +63,6 @@ export const StrategySchema = z.object({
     /** How the activation runs: practical steps for the visitor's own team. */
     points: Points,
     offers: Points,
-  }),
-  /** Finance: suggested monthly digital-marketing budget in KWD and how to split it. */
-  budget: z.object({
-    monthlyMin: z.number().int().nonnegative(),
-    monthlyMax: z.number().int().nonnegative(),
-    split: z.array(z.object({ channel: LocalizedSchema, percent: z.number().int().min(1).max(100) })).min(2).max(5),
-    note: LocalizedSchema,
   }),
   nextStep: LocalizedSchema,
   /** Short tags for the CREATE screen chips. */
@@ -139,9 +107,7 @@ export type LeadRequest = z.infer<typeof LeadRequestSchema>;
 
 export const LeadResponseSchema = z.object({ ok: z.literal(true), saved: z.boolean() });
 
-/* ---------- /api/transcribe, /api/speak ---------- */
-
-export const TranscribeResponseSchema = z.object({ text: z.string().min(1) });
+/* ---------- /api/speak ---------- */
 
 export const SpeakRequestSchema = z.object({
   text: z.string().trim().min(1).max(400),
@@ -152,7 +118,7 @@ export const SpeakRequestSchema = z.object({
 /* ---------- errors ---------- */
 
 /** Error states from design/reference/orb-states-and-errors.html. */
-export const ErrorStateSchema = z.enum(["reconnecting", "mic", "missed", "invalid-email"]);
+export const ErrorStateSchema = z.enum(["reconnecting", "invalid-email", "send-failed"]);
 export type ErrorState = z.infer<typeof ErrorStateSchema>;
 
 export const ApiErrorSchema = z.object({

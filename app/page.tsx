@@ -7,17 +7,14 @@ import { config } from "@/lib/config";
 import { LANGS, t as dict, type Lang } from "@/lib/i18n";
 import { getServices } from "@/lib/services";
 import { initialState, reducer } from "@/lib/session";
-import { useConversationTurns } from "@/lib/useConversationTurns";
 import { useCreateSequence } from "@/lib/useCreateSequence";
 import { useEmailSend } from "@/lib/useEmailSend";
-import { useHoldToTalk } from "@/lib/useHoldToTalk";
 import { useCountdown, useInactivity } from "@/lib/useInactivity";
 import { useSpokenLine } from "@/lib/useSpokenLine";
-import Conversation from "@/screens/Conversation";
 import Create from "@/screens/Create";
 import Email from "@/screens/Email";
-import Listening from "@/screens/Listening";
 import Preview from "@/screens/Preview";
+import Questions from "@/screens/Questions";
 import Thanks from "@/screens/Thanks";
 import Welcome from "@/screens/Welcome";
 
@@ -42,21 +39,6 @@ export default function Page() {
     return () => window.removeEventListener("pointerdown", unlockAudio, { capture: true });
   }, []);
 
-  const hold = useHoldToTalk({
-    stt: services.stt,
-    lang: state.lang,
-    expect: state.screen === "conversation" ? state.asking : null,
-    question: state.screen === "conversation" ? state.question?.[state.lang] : undefined,
-    onStart: () => {
-      services.tts.stop(); // the visitor can talk over the AI voice
-      dispatch({ type: "HOLD_START", id: crypto.randomUUID() });
-    },
-    onSend: (transcript) => dispatch({ type: "LISTEN_SEND", transcript }),
-    onCancel: () => dispatch({ type: "LISTEN_CANCEL" }),
-    onError: (error) => dispatch({ type: "ERROR", state: error }),
-  });
-  const { abort } = hold;
-  const turns = useConversationTurns(state, dispatch, services);
   const creating = useCreateSequence(state, dispatch, services);
   useEmailSend(state, dispatch, services);
 
@@ -65,20 +47,18 @@ export default function Page() {
   const ask = useSpokenLine(services.tts, state.screen === "email" ? t.email.spoken : null, `email:${state.sessionId}`, state.lang);
 
   const reset = useCallback(() => {
-    abort();
     services.tts.stop();
     setPrivacyOpen(false);
     dispatch({ type: "RESET" });
-  }, [abort, services.tts]);
+  }, [services.tts]);
 
-  // Inactivity: 60 s (90 s on Email) → "Still there?" → reset. Voice and AI work count as activity.
-  const idleScreens = state.screen === "listening" || state.screen === "conversation" || state.screen === "preview" || state.screen === "email";
+  // Inactivity: 60 s (90 s on Email) → "Still there?" → reset.
+  const idleScreens = state.screen === "questions" || state.screen === "preview" || state.screen === "email";
   const inactivity = useInactivity({
     enabled: idleScreens,
     timeout: state.screen === "email" ? config.timers.inactivityEmail : config.timers.inactivity,
     // Only taps reset the clock; it keeps counting while the AI thinks/speaks and while typing.
-    // Holding the mic button counts as a touch for as long as the finger is down.
-    busy: hold.state.holding,
+    busy: false,
     resetKey: `${state.sessionId}:${state.screen}`,
     onTimeout: reset,
   });
@@ -103,16 +83,15 @@ export default function Page() {
 
   // The AI says each sheet's line out loud in the screen language ("Reconnecting" only before its first auto-retry).
   const sheetLine =
-    sheet === "mic" ? t.errors.micBody
-    : sheet === "missed" ? t.errors.missedBody
-    : sheet === "idle" ? t.errors.idleTitle
+    sheet === "idle" ? t.errors.idleTitle
     : sheet === "reconnecting" && state.retryNonce === 0 ? t.errors.netBody
+    : sheet === "send-failed" ? t.errors.sendBody
     : null;
   useSpokenLine(services.tts, sheetLine, `sheet:${sheet}:${state.sessionId}`, state.lang);
 
   const setLang = useCallback((lang: Lang) => dispatch({ type: "SET_LANG", lang }), []);
 
-  // Dev only: lets the Playwright walkthrough open sheets without a real mic or network failure.
+  // Dev only: lets the Playwright walkthrough open sheets without a real network failure.
   useEffect(() => {
     if (process.env.NODE_ENV === "production") return;
     (window as unknown as { __mcg?: unknown }).__mcg = { dispatch };
@@ -123,39 +102,18 @@ export default function Page() {
   let screen: React.ReactNode;
   switch (state.screen) {
     case "welcome":
-      screen = (
-        <Welcome
-          t={t}
-          lang={state.lang}
-          onLang={setLang}
-          holdProps={hold.buttonProps}
-        />
-      );
+      screen = <Welcome t={t} lang={state.lang} onLang={setLang} onStart={() => dispatch({ type: "START", id: crypto.randomUUID() })} />;
       break;
-    case "listening":
+    case "questions":
       screen = (
-        <Listening
-          {...common}
-          hold={hold.state}
-          releaseRef={hold.releaseEl}
-          onRelease={() => void hold.release()}
-          onCancel={hold.cancel}
-        />
-      );
-      break;
-    case "conversation":
-      screen = (
-        <Conversation
+        <Questions
+          key={`${state.sessionId}:${state.step}`}
           {...common}
           brief={state.brief}
-          asking={state.asking}
-          question={state.question}
-          quickAnswers={state.quickAnswers}
-          lastAnswer={state.lastAnswer}
-          phase={turns.phase}
-          level={turns.level}
-          holdProps={hold.buttonProps}
-          onQuickAnswer={(answer) => dispatch({ type: "QUICK_ANSWER", answer })}
+          step={state.step}
+          onAnswer={(field, value, optionId) => dispatch({ type: "ANSWER", field, value, optionId })}
+          onBack={() => dispatch({ type: "BACK" })}
+          onDone={(brandName) => dispatch({ type: "QUESTIONS_DONE", brandName })}
         />
       );
       break;
@@ -207,7 +165,6 @@ export default function Page() {
           onStartOver={reset}
           onRetry={() => dispatch({ type: "RETRY" })}
           onDismiss={() => (sheet === "privacy" ? setPrivacyOpen(false) : dispatch({ type: "DISMISS_ERROR" }))}
-          holdProps={hold.buttonProps}
           countdown={inactivity.warnLeft}
           onStillHere={inactivity.stillHere}
         />
