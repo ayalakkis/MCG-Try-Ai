@@ -4,6 +4,7 @@ import Stage from "@/components/Stage";
 import SystemSheet, { type SheetState } from "@/components/SystemSheet";
 import { unlockAudio } from "@/lib/audio/context";
 import { config } from "@/lib/config";
+import { newId } from "@/lib/id";
 import { LANGS, t as dict, type Lang } from "@/lib/i18n";
 import { getServices } from "@/lib/services";
 import { initialState, reducer } from "@/lib/session";
@@ -102,7 +103,7 @@ export default function Page() {
   let screen: React.ReactNode;
   switch (state.screen) {
     case "welcome":
-      screen = <Welcome t={t} lang={state.lang} onLang={setLang} onStart={() => dispatch({ type: "START", id: crypto.randomUUID() })} />;
+      screen = <Welcome t={t} lang={state.lang} onLang={setLang} onStart={() => dispatch({ type: "START", id: newId() })} />;
       break;
     case "questions":
       screen = (

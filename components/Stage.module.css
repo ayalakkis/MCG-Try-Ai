@@ -1,7 +1,7 @@
 /* Locks the app to the 1366×1024 iPad Pro canvas and scales it to fit any other window. */
 /* overflow: clip (not hidden): a focused input must never scroll the fixed canvas (iPad keyboard). */
-.viewport { position: fixed; inset: 0; overflow: hidden; overflow: clip; background: #144074; }
-.scaler { position: absolute; left: 50%; top: 50%; width: 1366px; height: 1024px; transform-origin: 0 0; }
+.viewport { position: fixed; inset: 0; overflow: hidden; overflow: clip; background: #144074; display: grid; place-items: center; }
+.scaler { position: relative; width: 1366px; height: 1024px; flex: none; }
 
 .stage {
   position: relative; overflow: hidden; overflow: clip; background: #144074;

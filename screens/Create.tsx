@@ -1,4 +1,5 @@
 "use client";
+import { useEffect } from "react";
 import Card from "@/components/Card";
 import Chip from "@/components/Chip";
 import GreetingDots from "@/components/GreetingDots";
@@ -6,6 +7,7 @@ import Header from "@/components/Header";
 import { CheckIcon } from "@/components/icons";
 import Orb from "@/components/Orb";
 import { Canvas } from "@/components/Stage";
+import { startWaitingMusic, stopWaitingMusic } from "@/lib/audio/waitingMusic";
 import type { Dict, Lang } from "@/lib/i18n";
 import type { Brief, Localized } from "@/lib/services/types";
 import type { CreateProgress } from "@/lib/useCreateSequence";
@@ -34,6 +36,12 @@ interface CreateProps {
 export default function Create({ t, lang, onLang, onStartOver, brief, progress }: CreateProps) {
   const chips = chipsFor(brief, progress.strategy?.keywords);
   const pct = Math.round(progress.progress * 1000) / 10;
+
+  // Soft waiting music while the strategy is built; fades out when the screen goes (result or Start over).
+  useEffect(() => {
+    startWaitingMusic();
+    return () => stopWaitingMusic();
+  }, []);
 
   return (
     <Canvas style={{ paddingBottom: 40, overflow: "hidden" }}>

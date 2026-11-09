@@ -7,6 +7,7 @@
  * With consent, the lead is saved afterwards; that never blocks the visitor.
  */
 import { useEffect, type Dispatch } from "react";
+import { newId } from "./id";
 import { ServiceError } from "./services/errors";
 import type { Services } from "./services/interfaces";
 import type { Action, SessionState } from "./session";
@@ -17,7 +18,7 @@ export function useEmailSend(state: SessionState, dispatch: Dispatch<Action>, se
   useEffect(() => {
     if (!active || !state.strategy) return;
     let live = true;
-    const sessionId = state.id || crypto.randomUUID();
+    const sessionId = state.id || newId();
     const { email, name, consent, lang, strategy, brief } = state;
     services.email
       .send({ email, name: name || undefined, consent, lang, strategy, brief, sessionId })

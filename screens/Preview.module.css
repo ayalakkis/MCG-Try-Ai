@@ -27,25 +27,65 @@
 
 /* ---------- department cards ---------- */
 .cards { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
-.card {
-  border: 1px solid #E3EAF2; border-radius: 28px; overflow: hidden; background: #fff; display: flex; flex-direction: column;
-  box-shadow: 0 8px 24px rgba(20,64,116,.06); padding: 0; text-align: start; cursor: pointer; color: #144074;
-  transition: border-color .2s, box-shadow .2s;
+/* Each card is a two-sided tile: tapping turns it over (front = picture + summary, back = the points).
+   The turn goes edge-on (90°), swaps the sides while the card is invisible, then lands flat again, so at rest
+   nothing is in 3D and both sides stay as sharp as the rest of the page. */
+.card { position: relative; border: 0; background: none; padding: 0; text-align: start; cursor: pointer; color: #144074; perspective: 1400px; -webkit-tap-highlight-color: transparent; }
+.inner { position: absolute; inset: 0; }
+.turned .inner { animation: flipClose .6s; }
+.turned.cardOn .inner { animation: flipOpen .6s; }
+@keyframes flipOpen {
+  0% { transform: rotateY(0); animation-timing-function: cubic-bezier(.5,0,.9,.5); }
+  50% { transform: rotateY(90deg); }
+  50.01% { transform: rotateY(-90deg); animation-timing-function: cubic-bezier(.1,.5,.5,1); }
+  100% { transform: rotateY(0); }
 }
-.cardOn { border: 2.5px solid #2694CF; box-shadow: 0 0 0 6px rgba(38,148,207,.14); }
-.vis { position: relative; flex: none; height: 230px; background: #F7FAFD; border-bottom: 1px solid #EBF0F5; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; overflow: hidden; }
-.txt { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+@keyframes flipClose {
+  0% { transform: rotateY(0); animation-timing-function: cubic-bezier(.5,0,.9,.5); }
+  50% { transform: rotateY(-90deg); }
+  50.01% { transform: rotateY(90deg); animation-timing-function: cubic-bezier(.1,.5,.5,1); }
+  100% { transform: rotateY(0); }
+}
+[dir="rtl"] .turned .inner { animation-name: flipOpen; }
+[dir="rtl"] .turned.cardOn .inner { animation-name: flipClose; }
+.face {
+  position: absolute; inset: 0; display: flex; flex-direction: column; border-radius: 28px; overflow: hidden; background: #fff;
+  border: 1px solid #E3EAF2; box-shadow: 0 8px 24px rgba(20,64,116,.06);
+}
+/* The sides swap at the half-way point, when the card is edge-on. */
+.back { visibility: hidden; transition: visibility 0s .3s; border: 2.5px solid #2694CF; box-shadow: 0 0 0 6px rgba(38,148,207,.14); }
+.cardOn .back { visibility: visible; }
+.cardOn .front { visibility: hidden; }
+/* Press feedback on the front so a tap feels registered before the turn. */
+.front { transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease, visibility 0s .3s; }
+.card:active .front { transform: scale(.975); border-color: #CFE2F1; box-shadow: 0 4px 14px rgba(20,64,116,.10); }
+@media (prefers-reduced-motion: reduce) {
+  .turned .inner, .turned.cardOn .inner { animation: none; }
+  .back, .front { transition: none; }
+}
+.vis { position: relative; flex: none; height: 196px; background: #F7FAFD; border-bottom: 1px solid #EBF0F5; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; overflow: hidden; }
+.txt { flex: 1 1 0; padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 8px; min-height: 0; overflow: hidden; }
 .dept { font-size: 12.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #125D99; }
 .dept::before { content: ""; display: inline-block; width: .75em; height: .75em; border-radius: 50%; background: #E5418C; margin-inline-end: .5em; vertical-align: -.06em; }
 [dir="rtl"] .dept { letter-spacing: 0; font-size: 14px; }
-.txt h3 { margin: 0; font-size: 20px; line-height: 1.2; font-weight: 700; letter-spacing: -.01em; }
-[dir="rtl"] .txt h3 { letter-spacing: 0; line-height: 1.4; }
-.txt p { margin: 0; font-size: 15.5px; line-height: 1.45; color: #4E5F78; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+/* Titles share a two-line slot so the descriptions line up across the row (three lines at most). */
+.txt h3 { margin: 0; font-size: 20px; line-height: 1.2; font-weight: 700; letter-spacing: -.01em; min-height: 2.4em; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+[dir="rtl"] .txt h3 { letter-spacing: 0; line-height: 1.4; min-height: 2.8em; }
+.txt p { margin: 0; font-size: 15.5px; line-height: 1.45; color: #4E5F78; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
 
-/* Opened card: the practical points in place of the picture. */
-.points { margin: 0; padding: 18px 18px 18px 20px; list-style: none; display: flex; flex-direction: column; gap: 10px; align-self: stretch; background: #fff; height: 100%; justify-content: center; }
-.points li { position: relative; padding-inline-start: 16px; font-size: 15px; line-height: 1.4; }
-.points li::before { content: ""; position: absolute; inset-inline-start: 0; top: .5em; width: 7px; height: 7px; border-radius: 50%; background: #E5418C; }
+/* Opened card: label + title on the tinted head, then the practical points as a numbered list. */
+.openHead { flex: none; padding: 16px 16px 14px; background: #F7FAFD; border-bottom: 1px solid #EBF0F5; display: flex; flex-direction: column; gap: 8px; }
+.openTop { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.openHead h3 { margin: 0; font-size: 20px; line-height: 1.2; font-weight: 700; letter-spacing: -.01em; }
+[dir="rtl"] .openHead h3 { letter-spacing: 0; line-height: 1.4; }
+.close { flex: none; width: 30px; height: 30px; border-radius: 50%; background: #fff; border: 1px solid #E3EAF2; display: grid; place-items: center; color: #4E5F78; }
+.close svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; }
+.points { flex: 1 1 0; min-height: 0; overflow-y: auto; margin: 0; padding: 14px 16px 16px; list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.points li { position: relative; padding-inline-start: 15px; font-size: 14px; line-height: 1.42; color: #4E5F78; }
+.points li::before { content: ""; position: absolute; inset-inline-start: 0; top: .52em; width: 7px; height: 7px; border-radius: 50%; background: #E5418C; }
+.points li + li { padding-top: 12px; border-top: 1px solid #EBF0F5; }
+.points li + li::before { top: calc(12px + .52em); }
+.points li strong { display: block; color: #144074; font-weight: 700; margin-bottom: 1px; }
 
 /* Cartoon illustration filling the picture area */
 .art { width: 100%; height: 100%; object-fit: contain; padding: 14px 10px 6px; }
@@ -55,4 +95,42 @@
 .email { height: 76px; padding: 0 44px; font-size: 22px; gap: 14px; box-shadow: 0 14px 32px rgba(20,64,116,.28); }
 .email svg { font-size: 24px; }
 .notNow { height: 76px; padding: 0 32px; font-size: 20px; }
-.tapHint { margin-inline-start: auto; font-size: 16px; font-weight: 500; color: #4E5F78; }
+
+/* Flip badge on each card front: same spot and size as the × on the back; pulses twice when the result appears. */
+.more {
+  position: absolute; top: 13px; inset-inline-end: 13px; z-index: 1; width: 32px; height: 32px; border-radius: 50%;
+  background: #144074; color: #fff; display: grid; place-items: center; box-shadow: 0 4px 12px rgba(20,64,116,.25);
+  animation: morePulse 1.4s ease-out .6s 2;
+}
+.more svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+@keyframes morePulse { 0% { box-shadow: 0 0 0 0 rgba(38,148,207,.55); } 100% { box-shadow: 0 0 0 14px rgba(38,148,207,0); } }
+@media (prefers-reduced-motion: reduce) { .more { animation: none; } }
+
+/* Tapping hand on the first card: glides in, presses the flip badge (ripple), three times, then fades away.
+   Drawn at 60×60 (24-unit box × 2.5): fingertip 40px from the start edge (20px from the end) and 5px from the top,
+   so it lands on the badge centre (29px from the top and the end edge). RTL mirrors it around the fingertip so the
+   palm stays inside the card. */
+.hand {
+  position: absolute; top: 24px; inset-inline-end: 9px; width: 60px; height: 60px; z-index: 2; pointer-events: none; overflow: visible;
+  filter: drop-shadow(0 6px 10px rgba(20,64,116,.28));
+  opacity: 0; transform-origin: 66.667% 8.333%; animation: handTap 1.8s ease-in-out 1.2s 3 both;
+}
+[dir="rtl"] .hand { scale: -1 1; inset-inline-end: -11px; } /* mirrored around the fingertip: shift by 40 − 29 */
+@keyframes handTap {
+  0% { opacity: 0; transform: translate(22px, 26px); }
+  22% { opacity: 1; transform: translate(0, 0) scale(1); }
+  34% { transform: translate(0, 0) scale(.86); }
+  46% { transform: translate(0, 0) scale(1); }
+  78% { opacity: 1; transform: translate(0, 0); }
+  100% { opacity: 0; transform: translate(10px, 14px); }
+}
+.tapRing {
+  position: absolute; top: 13px; inset-inline-end: 13px; width: 32px; height: 32px; border-radius: 50%; z-index: 1; pointer-events: none;
+  border: 2.5px solid #2694CF; opacity: 0; animation: tapRing 1.8s ease-out 1.2s 3 both;
+}
+@keyframes tapRing {
+  0%, 32% { opacity: 0; transform: scale(1); }
+  36% { opacity: .9; transform: scale(1); }
+  70%, 100% { opacity: 0; transform: scale(2.3); }
+}
+@media (prefers-reduced-motion: reduce) { .hand, .tapRing { display: none; } }

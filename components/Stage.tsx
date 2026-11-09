@@ -24,7 +24,9 @@ export default function Stage({ children, dir, lang }: StageProps) {
 
   return (
     <div className={s.viewport}>
-      <div className={s.scaler} style={{ transform: `scale(${scale}) translate(-50%, -50%)` }}>
+      {/* zoom (not transform: scale) so text, SVGs and animated layers are laid out and drawn at the real
+          screen size instead of being drawn once and stretched, which looked blurry and pixelated. */}
+      <div className={s.scaler} style={{ zoom: scale }}>
         <div className={s.stage} dir={dir} lang={lang}>
           <i className={s.blob} style={{ width: 700, height: 700, left: -220, top: -260, background: "#2694CF" }} />
           <i className={s.blob} style={{ width: 640, height: 640, right: -240, top: 300, background: "#125D99" }} />
