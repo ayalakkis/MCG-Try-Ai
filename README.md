@@ -1,12 +1,16 @@
 # MCG Try AI
 
-The iPad Pro booth experience for MCG (Kuwait). A visitor talks to the AI, answers a few questions, watches
-their campaign get "created", sees a short preview and gets the full strategy by email.
+An interactive iPad Pro booth experience built for MCG (Kuwait). A visitor talks to an AI assistant, answers a few questions about their business, watches a marketing campaign get "created", sees a short preview and receives the full strategy by email. The experience works in English and Kuwaiti Arabic.
 
-- **Spec:** `HANDOFF.md`. **Visual source of truth:** `design/screens/*.html` (1366×1024 landscape).
-- **Stack:** Next.js 16 (App Router) + TypeScript, plain CSS Modules, deployed on Vercel.
-- **AI:** Gemini via the official `@google/genai` SDK: conversation, strategy, transcription and voice (TTS).
-- **Email:** Resend + React Email. **Leads:** Postgres (Neon via Vercel), optional.
+**Live:** https://mcg-try-ai.vercel.app
+
+## Tech stack
+
+- **Frontend:** Next.js 16 (App Router), TypeScript and CSS Modules, deployed on Vercel
+- **AI:** Gemini through the official `@google/genai` SDK for conversation, strategy generation, transcription and voice (TTS)
+- **Email:** Resend with React Email templates (English and right-to-left Arabic)
+- **Data:** Postgres (Neon via Vercel) for consented leads and anonymous usage events, optional
+- **Design reference:** layouts for the seven screens are in `design/` (1366×1024 landscape)
 
 ## Setup
 
@@ -48,7 +52,7 @@ lib/audio/              recorder (MediaRecorder + AnalyserNode), player (Web Aud
 app/api/conversation    Gemini Flash: next question, 4 quick answers, brief updates (EN + Kuwaiti AR)
 app/api/strategy        Gemini Pro: full strategy, preview fields fitted to config.limits
 app/api/transcribe      Gemini Flash audio understanding (Kuwaiti/Gulf Arabic, English or mixed)
-app/api/speak           Gemini 3.8 TTS → WAV
+app/api/speak           Gemini TTS → WAV
 app/api/email           React Email template (EN / AR RTL) → Resend
 app/api/leads           consented leads → Postgres (or nowhere)
 emails/                 StrategyEmail.tsx, StrategyEmailAr.tsx (shared StrategyEmailBase.tsx)
@@ -74,9 +78,6 @@ Start over, Not now, the inactivity timeout and the Thank-you reset.
 | `npm run db:migrate` | Applies `db/migrations/*.sql` to `DATABASE_URL`. |
 | `npm run walkthrough` | Playwright tour of every screen and sheet in EN + AR at 1366×1024 (mocks on) → `screenshots-out/walkthrough/`. |
 | `npm run shot -- <url> <out.png>` | Single frozen screenshot; `node scripts/compare.mjs a.png b.png out.png` diffs two. |
-
-TypeScript note: `typescript` is aliased to `@typescript/typescript6` because typescript-eslint needs the
-TS 6 API; `tsc` itself is TypeScript 7 (`@typescript/native`), as Microsoft recommends for TS 7.0.
 
 ## Admin page
 
@@ -125,9 +126,3 @@ TS 6 API; `tsc` itself is TypeScript 7 (`@typescript/native`), as Microsoft reco
 6. Request bodies are capped at 4.5 MB on Vercel; recordings are capped at 4 MB (`config.voice`).
 7. Rate limits are in-memory per instance: a soft guard for one booth. Move them to Redis/KV if the app
    is ever public.
-
-## Still to confirm with MCG (marked `TODO(MCG)` in code)
-
-- Real WhatsApp/Instagram links, privacy URL and event name (`lib/config.ts`).
-- Whether "MCG can contact me" may be pre-ticked (legal); privacy note copy (`lib/i18n.ts`).
-- The TTS voice for Kuwaiti Arabic (`npm run voices`, then `GEMINI_TTS_VOICE`).
