@@ -8,7 +8,9 @@ import { networkInterfaces } from "node:os";
 const forceMocks = process.env.USE_MOCKS === "true";
 
 const mockAi = forceMocks || (process.env.USE_MOCKS !== "false" && !process.env.GEMINI_API_KEY);
-const mockEmail = forceMocks || !process.env.RESEND_API_KEY || !process.env.EMAIL_FROM;
+const gmailSet = !!(process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD);
+const resendSet = !!(process.env.RESEND_API_KEY && process.env.EMAIL_FROM);
+const mockEmail = forceMocks || !(gmailSet || resendSet);
 
 /** This PC's LAN addresses, so a phone/iPad on the same Wi-Fi can use the dev server (npm run dev:phone). */
 const lanHosts = Object.values(networkInterfaces())

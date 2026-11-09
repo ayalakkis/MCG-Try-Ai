@@ -3,6 +3,7 @@ import { render } from "@react-email/components";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import nodemailer, { type Transporter } from "nodemailer";
 import { Resend } from "resend";
 import StrategyEmail from "@/emails/StrategyEmail";
 import StrategyEmailAr from "@/emails/StrategyEmailAr";
@@ -56,22 +57,103 @@ export async function renderStrategyEmail(req: Pick<EmailRequest, "lang" | "stra
 
 let client: Resend | null = null;
 
+/** One email per visitor session + address + language, whichever provider sends it. */
+function idempotencyKeyFor(req: EmailRequest, to: string): string {
+  return `strategy/${createHash("sha256").update(`${req.sessionId ?? req.strategy.id}:${to.toLowerCase()}:${req.lang}`).digest("hex").slice(0, 40)}`;
+}
+
+/** Gmail is used when GMAIL_USER and GMAIL_APP_PASSWORD are set; otherwise Resend. */
+export const gmailConfigured = () => !!(process.env.GMAIL_USER?.trim() && process.env.GMAIL_APP_PASSWORD?.trim());
+
+/**
+ * Sends the strategy to the visitor. With GMAIL_USER + GMAIL_APP_PASSWORD set it goes through that
+ * Gmail account (works for any recipient, ~500 a day); otherwise through Resend from EMAIL_FROM.
+ */
+export async function sendStrategyEmail(req: EmailRequest): Promise<string> {
+  return gmailConfigured() ? sendViaGmail(req) : sendViaResend(req);
+}
+
+let gmail: Transporter | null = null;
+/** Keys already delivered by this server instance, so a retried request never sends twice. */
+const gmailSent = new Map<string, string>();
+
+/**
+ * Gmail over SMTP with an app password (Google account → Security → App passwords).
+ * 25 s timeout; one retry only when the connection failed before Gmail accepted the message.
+ */
+async function sendViaGmail(req: EmailRequest): Promise<string> {
+  const user = process.env.GMAIL_USER!.trim();
+  const pass = process.env.GMAIL_APP_PASSWORD!.replace(/\s+/g, "");
+  gmail ??= nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: { user, pass },
+    connectionTimeout: config.ai.timeoutMs,
+    socketTimeout: config.ai.timeoutMs,
+  });
+  const { html, text, subject, attachments } = await renderStrategyEmail(req);
+  const to = req.email.trim();
+  const key = idempotencyKeyFor(req, to);
+  const done = gmailSent.get(key);
+  if (done) return done;
+
+  const name = process.env.EMAIL_FROM_NAME?.trim() || "MCG";
+  let last: HttpError = new HttpError(502, "email_upstream");
+  for (let attempt = 0; attempt <= config.ai.retries; attempt++) {
+    try {
+      const info = await gmail.sendMail({
+        from: { name, address: user },
+        to,
+        subject,
+        html,
+        text,
+        replyTo: process.env.EMAIL_REPLY_TO || undefined,
+        attachments: attachments?.map((a) => ({ filename: a.filename, content: a.content, cid: a.contentId })),
+      });
+      const id = info.messageId || key;
+      gmailSent.set(key, id);
+      return id;
+    } catch (e) {
+      const err = e as { code?: string; responseCode?: number; message?: string };
+      console.warn(`[email] gmail attempt ${attempt + 1}: ${err.code ?? ""} ${err.responseCode ?? ""} ${err.message ?? String(e)}`);
+      if (err.code === "EAUTH" || err.responseCode === 535 || err.responseCode === 534) {
+        console.error("[email] Gmail refused the login: check GMAIL_USER and that GMAIL_APP_PASSWORD is an app password (needs 2-step verification).");
+        throw new HttpError(500, "email_config", "send-failed");
+      }
+      // The address itself was refused (no such mailbox / bad address): inline invalid-email state.
+      if (err.code === "EENVELOPE" || err.responseCode === 550 || err.responseCode === 553 || err.responseCode === 501) {
+        throw new HttpError(422, "email_rejected", "invalid-email");
+      }
+      // Daily sending limit reached on the Gmail account.
+      if (err.responseCode === 421 || err.responseCode === 454 || /limit/i.test(err.message ?? "")) {
+        last = new HttpError(429, "email_upstream");
+        break;
+      }
+      last = new HttpError(502, "email_upstream");
+      // Only retry when nothing reached Gmail; after a timeout mid-send it may already be delivered.
+      if (!["ECONNECTION", "ESOCKET", "EDNS"].includes(err.code ?? "")) break;
+    }
+  }
+  throw last;
+}
+
 /**
  * Sends the strategy via Resend from EMAIL_FROM. 25 s timeout per attempt + 1 retry; the
  * idempotency key (visitor session + address) makes the retry, and any client-side retry,
  * deliver at most one email. Returns the Resend id.
  */
-export async function sendStrategyEmail(req: EmailRequest): Promise<string> {
+async function sendViaResend(req: EmailRequest): Promise<string> {
   const key = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM;
   if (!key || !from) {
-    console.error("[email] RESEND_API_KEY and EMAIL_FROM must be set (.env.local)");
+    console.error("[email] set GMAIL_USER + GMAIL_APP_PASSWORD, or RESEND_API_KEY + EMAIL_FROM (.env.local)");
     throw new HttpError(500, "email_config", "send-failed");
   }
   client ??= new Resend(key);
   const { html, text, subject, attachments } = await renderStrategyEmail(req);
   const to = req.email.trim();
-  const idempotencyKey = `strategy/${createHash("sha256").update(`${req.sessionId ?? req.strategy.id}:${to.toLowerCase()}:${req.lang}`).digest("hex").slice(0, 40)}`;
+  const idempotencyKey = idempotencyKeyFor(req, to);
 
   let last: HttpError = new HttpError(502, "email_upstream");
   for (let attempt = 0; attempt <= config.ai.retries; attempt++) {
