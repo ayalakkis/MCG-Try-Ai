@@ -80,7 +80,7 @@ export class HttpLeads implements LeadService {
 export class HttpTextToSpeech implements TextToSpeech {
   private player = new Player();
   private abort: AbortController | null = null;
-  /** Timings of the last line, for /voice-lab. */
+  /** Fetch time and size of the last line (for debugging latency). */
   last: { fetchMs: number; bytes: number } | null = null;
 
   async speak(text: string, lang = "ar-KW", onLevel?: LevelListener) {

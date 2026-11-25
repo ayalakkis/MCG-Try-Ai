@@ -1,6 +1,7 @@
 // Sends one EN and one AR strategy email (Bloom Coffee sample) to EMAIL_TEST_TO through the real
-// /api/email route, printing each Resend id and latency.
-// Needs the dev server (npm run dev) and RESEND_API_KEY, EMAIL_FROM, EMAIL_TEST_TO in .env.local.
+// /api/email route, printing each message id (Gmail or Resend) and latency.
+// Needs the dev server (npm run dev), EMAIL_TEST_TO, and either GMAIL_USER + GMAIL_APP_PASSWORD or
+// RESEND_API_KEY + EMAIL_FROM in .env.local.
 // Usage: npm run test:email [-- --base http://localhost:3000]
 import { existsSync } from "node:fs";
 import { EXAMPLES } from "../lib/examples";
@@ -42,10 +43,10 @@ async function main() {
     const ms = Math.round(performance.now() - t0);
     if (!res.ok || !json?.id) {
       console.error(`✗ ${lang.toUpperCase()} failed: HTTP ${res.status} ${JSON.stringify(json)} (${ms} ms)`);
-      if (json?.error === "email_config") console.error("  → set RESEND_API_KEY and EMAIL_FROM (a verified Resend domain) in .env.local, then restart the dev server.");
+      if (json?.error === "email_config") console.error("  → set GMAIL_USER + GMAIL_APP_PASSWORD, or RESEND_API_KEY + EMAIL_FROM (a verified Resend domain), in .env.local, then restart the dev server.");
       process.exit(1);
     }
-    console.log(`✓ ${lang.toUpperCase()}  Resend id ${json.id}  (${ms} ms)`);
+    console.log(`✓ ${lang.toUpperCase()}  message id ${json.id}  (${ms} ms)`);
   }
   console.log("\nCheck the inbox: subject \"Your campaign strategy from MCG\" / \"استراتيجية حملتك من MCG\".");
   console.log("Images load from APP_URL; set it to the deployed URL, since localhost isn't reachable by mail clients.");

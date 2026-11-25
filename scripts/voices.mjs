@@ -25,5 +25,5 @@ do {
   }
   page = res.next_page_token;
 } while (page);
-console.log(`\n${count} voices. Set GEMINI_TTS_VOICE=<id> in .env.local and try it in /voice-lab.`);
+console.log(`\n${count} voices. Set GEMINI_TTS_VOICE=<id> in .env.local, restart the dev server and listen on the Email screen.`);
 if (!count && !all) console.log("Nothing for Gulf regions: try `npm run voices -- --all`.");

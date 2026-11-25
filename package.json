@@ -8,7 +8,7 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "shot": "node scripts/screenshot.mjs",
-    "test:api": "node scripts/test-api.mjs",
+    "test:api": "tsx scripts/test-api.ts",
     "email:preview": "tsx scripts/email-preview.tsx",
     "test:email": "tsx scripts/test-email.ts",
     "lint": "eslint .",
